@@ -1,0 +1,262 @@
+/* Rede mit Meinungsmache – Seitengestaltung (ergänzt /style.css; Grundlage wie bei „Rede mit dem AfD-Gutachten“) */
+:root { --breite: 2200px; --mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, monospace; --flaeche-2: color-mix(in oklab, var(--flaeche) 70%, var(--bg)); }
+main.rahmen { padding-bottom: 72px; }
+code { font-family: var(--mono); font-size: .9em; }
+.sr-only { position: absolute; }
+.kopf nav { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* Bühne: Einleitung und Unterhaltung nebeneinander */
+.buehne { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: center; padding: clamp(32px, 5vw, 64px) 0 clamp(24px, 3vw, 40px); }
+.buehne h1 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.08; margin-bottom: 18px; }
+h1.mit-zeichen { display: flex; align-items: center; gap: .32em; }
+/* Projektfarbe (Logo-Familie): Bernstein, angelehnt an die Kennfarbe von meinungsmache.de; als Schrift auf hellem Grund dunkler */
+:root { --projekt: #e0a94f; }
+@media (prefers-color-scheme: light) { :root { --projekt: #8f5a0e; } }
+@supports (color: oklch(0% 0 0)) {
+  @media (color-gamut: p3) { :root { --projekt: oklch(78% 0.14 75); } }
+  @media (color-gamut: p3) and (prefers-color-scheme: light) { :root { --projekt: oklch(50% 0.115 65); } }
+}
+.projektzeichen { width: 1.15em; height: 1.15em; flex: none; color: var(--projekt); stroke-width: 1.5; }
+.lead { color: var(--text-2); font-size: clamp(1.02rem, 1.3vw, 1.15rem); margin: 0 0 24px; max-width: 62ch; }
+.adresse-titel { margin: 0 0 6px; font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); }
+.adresse { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 10px 10px 16px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); max-width: 640px; }
+.adresse code { flex: 1 1 260px; font-size: 1rem; font-weight: 600; color: var(--text); overflow-wrap: anywhere; user-select: all; }
+.kopieren { font: 600 .85rem/1 inherit; font-family: inherit; min-height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--akzent); background: color-mix(in oklab, var(--akzent) 14%, transparent); color: var(--text); cursor: pointer; transition: background .2s; }
+.kopieren:hover { background: color-mix(in oklab, var(--akzent) 26%, transparent); }
+.klein { font-size: .88rem; color: var(--text-2); margin: 8px 0 0; }
+.anbieter { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 22px; font-size: .88rem; color: var(--text-2); }
+.anbieter > span { margin-right: 4px; }
+.anbieter a { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 6px 13px; border: 1px solid var(--linie); border-radius: 999px; background: var(--flaeche); color: var(--text); text-decoration: none; transition: border-color .2s, transform .2s; }
+.anbieter a:hover, .anbieter a:focus-visible { border-color: var(--akzent); transform: translateY(-1px); }
+.logo { width: 1.15em; height: 1.15em; flex: none; display: block; }
+.logo-breit { height: 1.15em; width: auto; flex: none; display: block; }
+.ikon { width: 1.3em; height: 1.3em; flex: none; display: block; }
+.anbieter .logo-breit { height: 19px; }
+.logo-wort { height: 26px; width: auto; flex: none; display: block; }
+.lm-hell { display: none; }
+@media (prefers-color-scheme: light) { .lm-dunkel { display: none; } .lm-hell { display: block; } }
+
+/* Unterhaltung */
+.gespraech { padding: 22px clamp(14px, 2.4vw, 26px) 14px; border: 1px solid var(--linie); border-radius: 16px; background: var(--flaeche); box-shadow: 0 18px 50px -30px rgba(0, 0, 0, .55); }
+.gespraech-kopf { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); }
+.lampe { width: 8px; height: 8px; border-radius: 50%; background: var(--akzent); animation: lampe 2.4s ease-out infinite; }
+.g-buehne { display: grid; }
+.g { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 12px; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s linear .6s; }
+.g.aktiv { opacity: 1; visibility: visible; transition: opacity .6s ease; }
+.blase { max-width: min(94%, 600px); padding: 12px 16px; border-radius: 16px; line-height: 1.5; }
+.blase.frage { align-self: flex-end; background: var(--akzent); color: var(--bg); border-bottom-right-radius: 4px; font-size: clamp(1rem, 1.5vw, 1.18rem); font-weight: 600; min-height: 1.5em; }
+/* Im hellen Bild die dunklere Akzentfarbe, damit die Frage auch in kleiner Schrift 4,5 : 1 erreicht */
+@media (prefers-color-scheme: light) { .blase.frage { background: var(--akzent-text); } }
+.frage-text::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -.12em; background: currentColor; opacity: 0; }
+.g.laeuft:not(.gefragt) .frage-text::after { opacity: 1; animation: cursor .9s steps(1) infinite; }
+.werkzeug-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-family: var(--mono); font-size: .78rem; color: var(--text-2); }
+.werkzeug-zeile .ikon { width: 16px; height: 16px; color: var(--akzent); }
+.werkzeug-zeile code { padding: 1px 7px; border: 1px solid var(--linie); border-radius: 5px; background: var(--bg); color: var(--text); }
+.nw { white-space: nowrap; }
+.tippen { display: inline-flex; gap: 3px; }
+.tippen i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .3; }
+.g.laeuft.gefragt .tippen i { animation: tippen 1s ease-in-out 2; }
+.g.laeuft.gefragt .tippen i:nth-child(2) { animation-delay: .15s; }
+.g.laeuft.gefragt .tippen i:nth-child(3) { animation-delay: .3s; }
+.antwort-zeile { display: flex; gap: 10px; align-items: flex-start; }
+.avatar { width: 34px; height: 34px; flex: none; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--linie); background: var(--bg); color: var(--akzent); }
+.avatar .ikon { width: 19px; height: 19px; }
+.blase.antwort { background: var(--bg); border: 1px solid var(--linie); border-top-left-radius: 4px; font-size: clamp(.95rem, 1.2vw, 1.03rem); }
+.beleg { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 4px 11px; border: 1px solid color-mix(in oklab, var(--akzent) 45%, transparent); border-radius: 999px; font-family: var(--mono); font-size: .76rem; color: var(--akzent-text); text-decoration: none; }
+.beleg .ikon { width: 14px; height: 14px; }
+.beleg:hover { background: color-mix(in oklab, var(--akzent) 12%, transparent); }
+.g.laeuft .werkzeug-zeile, .g.laeuft .antwort-zeile, .g.laeuft .beleg { opacity: 0; }
+.g.laeuft.gefragt .werkzeug-zeile { animation: ein .45s ease .15s both; }
+.g.laeuft.gefragt .antwort-zeile { animation: ein .6s ease 2.1s both; }
+.g.laeuft.gefragt .beleg { animation: ein .5s ease 3s both; }
+.g-fuss { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--linie); }
+.g-fuss p { margin: 0; font-size: .8rem; color: var(--text-2); }
+.g-punkte { display: flex; gap: 2px; }
+.g-punkt { width: 32px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.g-punkt::before { content: ""; width: 8px; height: 8px; border-radius: 4px; background: var(--linie); transition: background .3s, width .3s; }
+.g-punkt[aria-current="true"]::before { width: 20px; background: var(--akzent); }
+@keyframes ein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes cursor { 50% { opacity: 0; } }
+@keyframes tippen { 0%, 100% { opacity: .3; transform: none; } 50% { opacity: 1; transform: translateY(-2px); } }
+@keyframes lampe { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--akzent) 45%, transparent); } 70%, 100% { box-shadow: 0 0 0 7px transparent; } }
+
+/* Kennzahlen */
+.kennzahlen { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.kennzahlen li { padding: 14px 18px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); color: var(--text-2); font-size: .85rem; line-height: 1.35; }
+.kennzahlen b { display: block; margin-bottom: 2px; font-size: 1.6rem; color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* Blöcke */
+.block { padding: clamp(36px, 4.5vw, 64px) 0 0; }
+.block h2 { margin: 0 0 18px; font-size: clamp(1.3rem, 2vw, 1.6rem); line-height: 1.25; }
+.block p, .block li { color: var(--text-2); }
+.block strong { color: var(--text); }
+.breit { max-width: 90ch; }
+h3.zwischen { margin: 40px 0 8px; font-size: 1.15rem; }
+.raster { display: grid; gap: 16px; }
+.raster.zwei { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 3vw, 40px); }
+.raster.drei { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.raster.vier { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.raster.zwei-ungleich { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); }
+.raster.zwei .code-kachel, .raster.vier .code-kachel { min-width: 0; }
+.kachel { position: relative; padding: 20px 22px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); scroll-margin-top: 20px; transition: border-color .3s; }
+.kachel:target { border-color: var(--akzent); }
+.kachel h3 { margin: 0; font-size: 1.15rem; }
+.mit-logo { display: flex; align-items: center; gap: 10px; }
+.kachel h3 .logo { width: 22px; height: 22px; }
+.kachel h3 .logo-breit { height: 24px; }
+.unter { margin: 4px 0 12px; font-size: .88rem; }
+.schritte { margin: 0 0 10px; padding-left: 1.3em; }
+.schritte li { margin-bottom: 6px; }
+.note { font-size: .85rem; font-style: italic; }
+.prog { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 10px; font-weight: 600; color: var(--text) !important; }
+.prog .logo, .prog .ikon { width: 18px; height: 18px; }
+.prog .ikon { color: var(--text-2); }
+.prog code { font-weight: 400; font-size: .8rem; color: var(--text-2); }
+pre.code { margin: 0; padding: 12px 14px; overflow-x: auto; border: 1px solid var(--linie); border-radius: 8px; background: var(--bg); font-family: var(--mono); font-size: .8rem; line-height: 1.5; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
+.code-kachel .unter { margin-top: -4px; }
+
+/* Ablauf */
+.ablauf { --luecke: 14px; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--luecke); margin: 8px 0 0; padding: 0; }
+.ablauf li { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; font-size: .9rem; line-height: 1.4; }
+.ablauf b { display: block; margin: 10px 0 2px; color: var(--text); font-size: 1rem; }
+.rund { position: relative; z-index: 1; width: 58px; height: 58px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--linie); background: var(--flaeche); color: var(--akzent); }
+.rund .ikon { width: 26px; height: 26px; }
+/* Linie von Kreisrand zu Kreisrand (Kreis 58 px, Abstand 7 px), über die Spaltenlücke hinweg */
+.ablauf li:not(:last-child)::after { content: ""; position: absolute; top: 29px; left: calc(50% + 36px); right: calc(-50% - var(--luecke) + 36px); border-top: 1px dashed var(--linie); }
+/* Punkt wandert als Staffel: jede Strecke 1,5 s, dann übernimmt die nächste; Wege nur in Prozent der Spalte, deshalb überall gleich schnell */
+.ablauf li:not(:last-child)::before { content: ""; position: absolute; top: 26px; left: calc(50% + 36px); width: 6px; height: 6px; border-radius: 50%; background: var(--akzent); opacity: 0; animation: fluss 4.5s linear infinite; animation-delay: calc(var(--n) * 1.5s); }
+@keyframes fluss { 0% { left: calc(50% + 36px); opacity: 0; } 3% { opacity: 1; } 33.3% { left: calc(150% - 28px); opacity: 1; } 38% { left: calc(150% - 28px); opacity: 0; } 100% { left: calc(150% - 28px); opacity: 0; } }
+
+.ablauf-text { max-width: 72ch; margin: 44px auto 0; text-align: center; }
+/* Beispiele, Hinweise */
+.beispiele { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.beispiele li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 14px; border-left: 3px solid var(--akzent); border-radius: 0 8px 8px 0; background: var(--flaeche); color: var(--text) !important; }
+.beispiele .ikon { width: 18px; height: 18px; margin-top: 3px; color: var(--akzent); }
+.mit-ikon-absatz { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 6px; }
+.mit-ikon-absatz > .ikon { width: 22px; height: 22px; margin-top: 2px; color: var(--akzent); }
+.mit-ikon-absatz p { flex: 1; margin-top: 0; }
+
+/* Werkzeuge */
+.werkzeuge { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 10px; }
+.werkzeuge li { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); font-size: .92rem; }
+.werkzeuge code { color: var(--text); font-weight: 600; }
+.hinweisbox { padding: 20px 22px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); font-size: .92rem; }
+.hinweisbox h2 { font-size: 1.15rem; }
+.ds h3 { margin: 0 0 6px; font-size: 1rem; }
+.ds p { font-size: .92rem; }
+
+/* Mittlere Breiten */
+@media (max-width: 1100px) {
+  .raster.vier { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kennzahlen { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 960px) {
+  .buehne { grid-template-columns: 1fr; }
+  .raster.drei, .raster.zwei, .raster.zwei-ungleich { grid-template-columns: 1fr; }
+}
+/* Smartphone */
+@media (max-width: 640px) {
+  .raster.vier { grid-template-columns: 1fr; }
+  .kennzahlen { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kennzahlen li:last-child { grid-column: 1 / -1; }
+  .ablauf { grid-template-columns: 1fr; gap: 0; }
+  .ablauf li { flex-direction: row; text-align: left; gap: 14px; padding: 8px 0; }
+  .ablauf b { margin: 0 0 2px; }
+  .ablauf-text { margin-top: 20px; text-align: left; }
+  .ablauf li:not(:last-child)::after { top: 66px; bottom: -8px; left: 29px; right: auto; border-top: 0; border-left: 1px dashed var(--linie); }
+  .ablauf li:not(:last-child)::before { display: none; }
+  .kachel { padding: 16px; }
+  .blase { max-width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .g, .g.aktiv { transition: none; }
+}
+
+/* Diagramm „Wie es gemacht ist“ (seite/diagramm.py): quer ab 641 px, hoch auf dem Smartphone */
+.diagramm { margin: 4px 0 clamp(24px, 3vw, 40px); }
+.diagramm svg { display: block; width: 100%; height: auto; margin: 0 auto; }
+.diagramm .d-quer { max-width: 1180px; }
+.diagramm .d-hoch { display: none; max-width: 460px; }
+.aufbau-text { align-items: start; }
+
+/* Offener Quelltext */
+.quelltext { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: clamp(22px, 4vw, 64px); align-items: center;
+  padding: clamp(22px, 3.2vw, 44px); border: 1px solid var(--linie); border-radius: 18px;
+  background: radial-gradient(120% 140% at 0% 0%, color-mix(in oklab, var(--projekt) 9%, var(--flaeche)) 0%, var(--flaeche) 55%); }
+.quelltext h2 { margin-bottom: 14px; font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
+.qt-zeichen { width: 1.15em; height: 1.15em; color: var(--projekt); }
+.qt-kopf > p:first-of-type { margin: 0; font-size: clamp(1rem, 1.2vw, 1.08rem); max-width: 56ch; }
+.qt-knoepfe { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.knopf { display: inline-flex; align-items: center; gap: 9px; min-height: 46px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--akzent);
+  background: color-mix(in oklab, var(--akzent) 16%, transparent); color: var(--text); font-weight: 600; text-decoration: none; transition: background .2s, transform .2s; }
+.knopf .ikon { width: 1.15em; height: 1.15em; color: var(--akzent); }
+.knopf:hover, .knopf:focus-visible { background: color-mix(in oklab, var(--akzent) 28%, transparent); transform: translateY(-1px); }
+.knopf.leise { border-color: var(--linie); background: transparent; }
+.knopf.leise:hover, .knopf.leise:focus-visible { border-color: var(--akzent); }
+.qt-pfad { margin: 12px 0 0; font-family: var(--mono); font-size: .82rem; overflow-wrap: anywhere; }
+.qt-teile { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.qt-teile li { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--bg); font-size: .92rem; line-height: 1.45; }
+.qt-teile b { color: var(--text); font-size: 1rem; }
+.qt-teile code { margin-top: auto; padding-top: 4px; font-size: .8rem; color: var(--projekt); }
+@media (max-width: 960px) { .quelltext { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .diagramm .d-quer { display: none; }
+  .diagramm .d-hoch { display: block; }
+  .qt-teile { grid-template-columns: 1fr; }
+  .knopf { flex: 1 1 auto; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { .knopf { transition: none; } .knopf:hover { transform: none; } }
+
+/* Zuletzt erschienen (wird von seite.js aus stand.php aktualisiert) */
+.neueste { list-style: none; margin: 0 0 10px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.neueste li { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); transition: border-color .2s; }
+.neueste li:hover { border-color: color-mix(in oklab, var(--projekt) 55%, var(--linie)); }
+.neueste a { color: var(--text); font-weight: 600; line-height: 1.35; text-decoration: none; }
+.neueste a:hover, .neueste a:focus-visible { text-decoration: underline; }
+.n-meta { display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: .8rem; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.n-art { font-family: var(--mono); font-size: .76rem; color: var(--projekt); }
+.neueste li.frisch { animation: frisch 1.2s ease-out; }
+@keyframes frisch { from { border-color: var(--projekt); } }
+@media (max-width: 1100px) { .neueste { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .neueste { grid-template-columns: 1fr; } }
+
+/* Briefing: vier Zeiträume */
+.briefings { list-style: none; margin: 18px 0 14px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.briefings li { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); }
+.briefings .ikon { width: 26px; height: 26px; flex: none; margin-top: 1px; color: var(--projekt); }
+.briefings div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.briefings b { color: var(--text); }
+.briefings span { font-size: .88rem; color: var(--text-2); }
+.briefings q { margin-top: 8px; font-size: .9rem; color: var(--text); quotes: "„" "“"; }
+@media (max-width: 1300px) { .briefings { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .briefings { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .neueste li.frisch { animation: none; } .neueste li { transition: none; } }
+
+/* --akzent-text (Akzentfarbe als Schrift, im hellen Bild dunkler) kommt aus der gemeinsamen style.css */
+
+/* Sehr schmale Smartphones (320 px): Titel kleiner, Spalte darf schrumpfen */
+@media (max-width: 960px) { .buehne { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 360px) { .buehne h1 { font-size: 7.6vw; } .kennzahlen li { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; } }
+
+/* Menü auf dem Smartphone: Knopf klappt die Navigation auf (nur mit JavaScript; ohne bleiben alle Links sichtbar) */
+.kopf { position: relative; }
+.menue-knopf { display: none; }
+@media (max-width: 640px) {
+  .js .menue-knopf { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid var(--linie); border-radius: 999px;
+    background: var(--flaeche); color: var(--text); font: inherit; font-weight: 600; cursor: pointer; }
+  .js .menue-knopf .ikon { width: 18px; height: 18px; }
+  .js .menue-knopf .zu { display: none; }
+  .js .kopf.offen .menue-knopf .auf { display: none; }
+  .js .kopf.offen .menue-knopf .zu { display: block; }
+  .js .kopf nav { position: absolute; top: 100%; left: 0; right: 0; z-index: 30; display: flex; flex-direction: column; gap: 0;
+    padding: 6px clamp(16px, 4vw, 48px) 12px; background: var(--bg); border-bottom: 1px solid var(--linie);
+    box-shadow: 0 24px 40px -28px rgba(0, 0, 0, .6); opacity: 0; visibility: hidden; transform: translateY(-6px);
+    transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s; }
+  .js .kopf.offen nav { opacity: 1; visibility: visible; transform: none; transition: opacity .2s ease, transform .2s ease; }
+  .js .kopf nav a { display: flex; align-items: center; min-height: 48px; padding: 0 4px; border-bottom: 1px solid var(--linie); font-size: 1.05rem; }
+  .js .kopf nav a:last-child { border-bottom: 0; }
+}
+@media (max-width: 360px) {
+  .js .menue-knopf { width: 44px; padding: 0; justify-content: center; }
+  .js .menue-wort { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}

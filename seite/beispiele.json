@@ -1,0 +1,47 @@
+[
+ {
+  "frage": "Was war heute los?",
+  "werkzeug": "briefing",
+  "antwort": "Seit 6 Uhr sind drei Meldungen erschienen, alle nach Berichten der Tagesschau: Die EU-Kommission wirft Temu vor, Kundinnen und Kunden zu wenig vor gefährlichen Produkten zu schützen. Volkswagen will Zusatzvergütungen streichen und die Arbeitszeit ohne Lohnausgleich erhöhen. Und rechnerisch arbeiten Frauen seit dem 20. November unbezahlt; die Lohnlücke liegt in Deutschland bei 16 Prozent.",
+  "beleg": [
+   "Temu · Tagesschau, 21.11.",
+   "https://meinungsmache.de/article/temu-mangelhafter-schutz-fuer-kunden-vor-gefaehrlichen-produkten"
+  ]
+ },
+ {
+  "frage": "Wie ist die Wahl in Serbien ausgegangen?",
+  "werkzeug": "bedeutung_suchen",
+  "antwort": "Laut einer Meldung nach der Tagesschau (27.10.) hat die oppositionelle Studentenliste die Parlamentswahl mit rund 53 Prozent der Stimmen gewonnen; der langjährige Machthaber Aleksandar Vučić hat seine Niederlage eingestanden. Vor der Wahl hatte eine Meldung nach der Süddeutschen Zeitung berichtet, dass Vučić als Ministerpräsident an der Macht bleiben wollte.",
+  "beleg": [
+   "Meldung · Tagesschau, 27.10.",
+   "https://meinungsmache.de/article/parlamentswahl-in-serbien-die-junge-opposition-feiert-wahlsieg"
+  ]
+ },
+ {
+  "frage": "Was schreibt Meinungsmache über das Bürgergeld?",
+  "werkzeug": "suchen",
+  "antwort": "Eine Meldung nach der Süddeutschen Zeitung (23.10.) berichtet, dass die neue Grundsicherung in den ersten drei Monaten kaum Einsparungen gebracht hat; ein Ifo-Ökonom hält zweistellige Milliardenbeträge für nie realistisch. Dazu kommen mehrere eigene Artikel, etwa von Jakob und Natalie, die die Reform und die Debatte darüber als Meinungsbeiträge kritisch einordnen.",
+  "beleg": [
+   "Meldung · Süddeutsche Zeitung, 23.10.",
+   "https://meinungsmache.de/article/buergergeld-reform-bringt-doch-keine-grossen-einsparungen"
+  ]
+ },
+ {
+  "frage": "Welche eigenen Artikel hat die Redaktion zuletzt veröffentlicht?",
+  "werkzeug": "neueste",
+  "antwort": "Am 17. November ein Erfahrungsbericht von Gerrit über die Gen-Z-Demonstration in Leipzig am 31. Oktober, an der laut Polizei rund 7.000 Menschen teilnahmen. Am 11. November eine Analyse von Paul über Spionagesoftware gegen Journalistinnen und Journalisten, ausgehend von Angriffen mit dem Programm Graphite auf Redakteure von Fanpage.it.",
+  "beleg": [
+   "Gerrit, 17.11.",
+   "https://meinungsmache.de/article/ich-war-in-leipzig-und-hatte-angst"
+  ]
+ },
+ {
+  "frage": "Aus welchen Medien stammen die Meldungen?",
+  "werkzeug": "quellen",
+  "antwort": "Von 397 Meldungen seit Dezember 2025 gehen die meisten auf die Tagesschau zurück (189), gefolgt von der Zeit (100) und der Süddeutschen Zeitung (57); dazu der Tagesspiegel (18) und gut ein Dutzend weitere Medien wie Spiegel, Standard und Deutschlandfunk. Daneben stehen 39 eigene Artikel der Redaktion.",
+  "beleg": [
+   "meinungsmache.de",
+   "https://meinungsmache.de"
+  ]
+ }
+]

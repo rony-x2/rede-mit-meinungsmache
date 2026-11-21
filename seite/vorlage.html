@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rede mit Meinungsmache – Proof of Concept</title>
+  <meta name="description" content="{{BESCHREIBUNG}}">
+  <link rel="canonical" href="https://poc.deutschkaemer.info/meinungsmache/">
+  <!-- Open Graph (Vorschau beim Teilen) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="poc.deutschkaemer.info">
+  <meta property="og:locale" content="de_DE">
+  <meta property="og:title" content="Rede mit Meinungsmache">
+  <meta property="og:description" content="{{BESCHREIBUNG}}">
+  <meta property="og:url" content="https://poc.deutschkaemer.info/meinungsmache/">
+  <meta property="og:image" content="https://poc.deutschkaemer.info/meinungsmache/og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Rede mit Meinungsmache – die Nachrichten von meinungsmache.de über eine MCP-Schnittstelle befragen">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="color-scheme" content="dark light">
+  <meta name="darkreader-lock">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#0f1115">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="/style.css?v=5">
+  <link rel="stylesheet" href="seite.css?v={{V_CSS}}">
+{{SCHEMA}}
+</head>
+<body>
+  <header class="kopf">
+    <div class="rahmen">
+      <a class="marke" href="/">poc<span>.deutschkaemer.info</span></a>
+      <button class="menue-knopf" type="button" aria-expanded="false" aria-controls="hauptnavigation">{{ikon:menue:ikon auf}}{{ikon:schliessen:ikon zu}}<span class="menue-wort">Menü</span></button>
+      <nav id="hauptnavigation" aria-label="Hauptnavigation">
+        <a href="#einrichten">Einrichten</a>
+        <a href="#briefing">Briefing</a>
+        <a href="#werkzeuge">Werkzeuge</a>
+        <a href="#aufbau">Aufbau</a>
+        <a href="#quelltext">Quelltext</a>
+        <a href="#datenschutz">Datenschutz</a>
+        <a href="/">Alle PoCs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="rahmen">
+    <section class="buehne">
+      <div class="buehne-text">
+        <p class="kicker">Proof of Concept · Prototyp</p>
+        <h1 class="mit-zeichen">{{ikon:projekt:projektzeichen}}<span>Rede mit Meinungsmache</span></h1>
+        <p class="lead">Die Nachrichten von <a href="https://meinungsmache.de">meinungsmache.de</a> im eigenen KI-Assistenten: Fragen zu aktuellen Themen stellen oder sich morgens und abends ein Briefing zusammenstellen lassen. Claude, ChatGPT, Grok oder ein lokales Modell sehen selbst in den Artikeln nach und antworten mit Link zum Beitrag und zur Originalquelle.</p>
+        <p class="adresse-titel">Adresse der Schnittstelle</p>
+        <div class="adresse"><code id="mcp-adresse">{{ADRESSE}}</code><button class="kopieren" type="button" data-kopie="mcp-adresse">Kopieren</button></div>
+        <p class="klein">Liest nur, keine Anmeldung, kostenlos. Stündlich aktualisiert.</p>
+        <div class="anbieter"><span>Funktioniert mit</span>
+          <a href="#claude">{{logo:Claude_AI_symbol.svg}}Claude</a>
+          <a href="#lmstudio">{{logo:lm-studio-icon-color.svg}}LM Studio</a>
+          <a href="#chatgpt">{{logo:OpenAI_logo_2025_(symbol).svg}}ChatGPT</a>
+          <a href="#grok" aria-label="Grok">{{logo:Grok-feb-2025-logo.svg:logo-breit}}</a>
+          <a href="#andere">{{logo:claude-code.svg}}Claude Code</a>
+          <a href="#andere">{{logo:codex-openai.svg}}Codex</a>
+          <a href="#andere">{{ikon:code:ikon logo}}weitere</a>
+        </div>
+      </div>
+
+      <div class="gespraech" aria-roledescription="Beispiel-Unterhaltung">
+        <div class="gespraech-kopf"><span class="lampe"></span>So sieht das aus</div>
+        <div class="g-buehne" aria-live="off">
+{{GESPRAECHE}}
+        </div>
+        <div class="g-fuss">
+          <p>Echte Antworten über die Schnittstelle, gekürzt ({{STAND_BEISPIELE}}).</p>
+          <div class="g-punkte" role="group" aria-label="Beispiel wählen">
+{{PUNKTE}}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <ul class="kennzahlen" aria-label="Umfang der aufbereiteten Daten" data-stand="stand.php">
+      <li><b data-feld="artikel">{{Z_ARTIKEL}}</b><span>Artikel seit Dezember 2025</span></li>
+      <li><b data-feld="meldungen">{{Z_MELDUNGEN}}</b><span>Meldungen mit Link zum Original</span></li>
+      <li><b data-feld="eigene">{{Z_EIGENE}}</b><span>eigene Artikel der Redaktion</span></li>
+      <li><b data-feld="quellen">{{Z_QUELLEN}}</b><span>Medien als Quelle</span></li>
+      <li><b>stündlich</b><span>abgerufen, zuletzt <span data-feld="letzter_abruf">{{Z_ABRUF}}</span></span></li>
+    </ul>
+
+    <section class="block">
+      <h2>Wie das funktioniert</h2>
+      <ol class="ablauf">
+        <li style="--n:0"><span class="rund">{{ikon:frage}}</span><span><b>Fragen</b>in eigenen Worten, im Chat</span></li>
+        <li style="--n:1"><span class="rund">{{ikon:assistent}}</span><span><b>Assistent sucht</b>mit den Werkzeugen der Schnittstelle</span></li>
+        <li style="--n:2"><span class="rund">{{ikon:zeitung}}</span><span><b>Artikel</b>von meinungsmache.de, stündlich aktuell</span></li>
+        <li style="--n:3"><span class="rund">{{ikon:beleg}}</span><span><b>Antwort mit Links</b>zum Beitrag und zur Originalquelle</span></li>
+      </ol>
+      <p class="ablauf-text">meinungsmache.de bündelt Nachrichten, Meinungen und Analysen: kurze Meldungen, die Berichte anderer Medien zusammenfassen und auf das Original verlinken, und eigene Artikel der Redaktion. Dieser Prototyp holt die Artikel stündlich ab und macht sie über eine Schnittstelle nach dem Model Context Protocol (MCP) zugänglich. Ein Assistent, der sie kennt, kann damit selbst nachsehen: die neuesten Artikel auflisten, nach Wörtern oder nach Bedeutung suchen, einzelne Artikel vollständig lesen und alles eines Zeitraums für ein Briefing abrufen.</p>
+    </section>
+
+    <section class="block neu-block" aria-labelledby="neu-titel">
+      <h2 id="neu-titel">Zuletzt erschienen</h2>
+      <ul class="neueste" data-stand-liste>
+{{NEUESTE}}
+      </ul>
+      <p class="klein">Aus der Datenbank der Schnittstelle, Stand <span data-feld="bis">{{Z_BIS}}</span>. Die Links führen zu meinungsmache.de.</p>
+    </section>
+
+    <section class="block" id="einrichten">
+      <h2>Einrichten</h2>
+      <div class="raster vier einrichten">
+        <article class="kachel" id="claude">
+          <h3 class="mit-logo">{{logo:Claude_AI_symbol.svg}}Claude</h3>
+          <p class="unter">claude.ai, Desktop- und Smartphone-App</p>
+          <ol class="schritte">
+            <li>Einstellungen öffnen, dort <strong>Connectors</strong> (bzw. „Anpassen → Connectors“).</li>
+            <li><strong>Benutzerdefinierten Connector hinzufügen</strong> wählen.</li>
+            <li>Name, etwa „Meinungsmache“, und die Adresse eintragen; Anmeldung: keine.</li>
+            <li>In einer Unterhaltung über „+“ → Connectors einschalten und einfach fragen.</li>
+          </ol>
+          <p class="note">In Team- und Enterprise-Konten richtet die Organisation Connectors ein. In kostenlosen Konten ist ein benutzerdefinierter Connector möglich.</p>
+        </article>
+        <article class="kachel" id="lmstudio">
+          <h3 class="mit-logo"><span class="lm-dunkel">{{logo:lm-studio-logo-color-white.svg:logo-wort}}</span><span class="lm-hell">{{logo:lm-studio-logo-color-black.svg:logo-wort}}</span><span class="sr-only">LM Studio</span></h3>
+          <p class="unter">Desktop-App mit lokalen Modellen, ab Version 0.3.17</p>
+          <ol class="schritte">
+            <li>In der rechten Seitenleiste den Reiter <strong>Program</strong> öffnen, dann <strong>Install</strong> → <strong>Edit mcp.json</strong>.</li>
+            <li>Den Eintrag einfügen und speichern. Stehen schon Server in der Datei, nur die Zeile mit <code>"meinungsmache"</code> ergänzen.</li>
+            <li>Ein Modell laden, das Werkzeuge aufrufen kann (etwa Qwen3 oder Gemma 4), mindestens 32k Kontext einstellen und fragen.</li>
+          </ol>
+          <pre class="code">{
+  "mcpServers": {
+    "meinungsmache": {
+      "url": "{{ADRESSE}}"
+    }
+  }
+}</pre>
+          <p class="note">Die Unterhaltung bleibt auf dem eigenen Rechner; nur die Werkzeugaufrufe gehen an die Schnittstelle. Ein Wochenbriefing kann lang werden, mit zu wenig Kontext bricht das Modell ab.</p>
+        </article>
+        <article class="kachel" id="chatgpt">
+          <h3 class="mit-logo">{{logo:OpenAI_logo_2025_(symbol).svg}}ChatGPT</h3>
+          <p class="unter">chatgpt.com und App</p>
+          <ol class="schritte">
+            <li>Einstellungen → <strong>Apps &amp; Connectors</strong> → Erweiterte Einstellungen: den <strong>Entwicklermodus</strong> einschalten (je nach Tarif und Organisation verfügbar).</li>
+            <li>Dort <strong>Erstellen</strong> wählen, Name und Adresse eintragen, Authentifizierung: keine.</li>
+            <li>In der Unterhaltung über „+“ den Connector auswählen.</li>
+          </ol>
+          <p class="note">Ohne Entwicklermodus nutzt ChatGPT von einer Schnittstelle nur Suche und Abruf; dafür gibt es die Werkzeuge <code>search</code> und <code>fetch</code>. Bezeichnungen der Menüs können sich ändern.</p>
+        </article>
+        <article class="kachel" id="grok">
+          <h3 class="mit-logo">{{logo:Grok-feb-2025-logo.svg:logo-breit}}<span class="sr-only">Grok</span></h3>
+          <p class="unter">grok.com</p>
+          <ol class="schritte">
+            <li>Die <strong>Connectors</strong> öffnen und <strong>New Connector</strong> wählen.</li>
+            <li><strong>Custom</strong> wählen und die Adresse eintragen; eine Anmeldung ist nicht nötig.</li>
+          </ol>
+          <p class="note">In Business- und Enterprise-Konten muss zuerst die Verwaltung den Connector freigeben.</p>
+        </article>
+      </div>
+
+      <h3 class="zwischen mit-logo" id="andere">{{ikon:code:ikon logo}}Andere Programme</h3>
+      <p class="breit">Jedes Programm, das entfernte MCP-Server über „Streamable HTTP“ einbinden kann, funktioniert mit derselben Adresse.</p>
+      <div class="raster vier">
+        <article class="kachel code-kachel">
+          <p class="prog">{{logo:claude-code.svg}}Claude Code</p>
+          <pre class="code">claude mcp add --transport http \
+  meinungsmache {{ADRESSE}}</pre>
+        </article>
+        <article class="kachel code-kachel">
+          <p class="prog">{{logo:codex-openai.svg}}OpenAI Codex</p>
+          <pre class="code">codex mcp add meinungsmache \
+  --url {{ADRESSE}}</pre>
+        </article>
+        <article class="kachel code-kachel">
+          <p class="prog">{{ikon:code}}Cursor <code>~/.cursor/mcp.json</code></p>
+          <pre class="code">{
+  "mcpServers": {
+    "meinungsmache": {
+      "url": "{{ADRESSE}}"
+    }
+  }
+}</pre>
+        </article>
+        <article class="kachel code-kachel">
+          <p class="prog">{{ikon:code}}VS Code <code>.vscode/mcp.json</code></p>
+          <pre class="code">{
+  "servers": {
+    "meinungsmache": {
+      "type": "http",
+      "url": "{{ADRESSE}}"
+    }
+  }
+}</pre>
+        </article>
+      </div>
+
+      <h3 class="zwischen mit-logo" id="entwickler">{{ikon:werkzeug:ikon logo}}Für eigene Anwendungen</h3>
+      <p class="breit">Die Schnittstellen von Anthropic und OpenAI können entfernte MCP-Server direkt aus einer Anfrage heraus ansprechen, etwa für ein Briefing, das ein eigenes Skript jeden Morgen erzeugt. Die Aufrufe kommen dann von deren Servern; eine Anmeldung ist nicht nötig. Alle Werkzeuge lesen nur, eine Freigabe einzelner Aufrufe ist deshalb entbehrlich.</p>
+      <div class="raster zwei">
+        <article class="kachel code-kachel">
+          <p class="prog">{{logo:Claude_AI_symbol.svg}}Claude API (Messages)</p>
+          <p class="unter">Beta-Kopfzeile <code>anthropic-beta: mcp-client-2025-11-20</code></p>
+          <pre class="code">{
+  "model": "MODELL",
+  "max_tokens": 2000,
+  "mcp_servers": [
+    { "type": "url", "name": "meinungsmache",
+      "url": "{{ADRESSE}}" }
+  ],
+  "tools": [
+    { "type": "mcp_toolset", "mcp_server_name": "meinungsmache" }
+  ],
+  "messages": [
+    { "role": "user", "content": "Mach mir ein kurzes Morgenbriefing." }
+  ]
+}</pre>
+        </article>
+        <article class="kachel code-kachel">
+          <p class="prog">{{logo:OpenAI_logo_2025_(symbol).svg}}OpenAI API (Responses)</p>
+          <p class="unter">ohne zusätzliche Kopfzeile</p>
+          <pre class="code">{
+  "model": "MODELL",
+  "tools": [
+    {
+      "type": "mcp",
+      "server_label": "meinungsmache",
+      "server_url": "{{ADRESSE}}",
+      "require_approval": "never"
+    }
+  ],
+  "input": "Was gab es heute Abend Neues?"
+}</pre>
+        </article>
+      </div>
+      <p class="note breit">Mit <code>allowed_tools</code> (OpenAI) bzw. <code>default_config</code> und <code>configs</code> im Werkzeugsatz (Anthropic) lässt sich die Auswahl der Werkzeuge einschränken, etwa auf <code>briefing</code> und <code>artikel_lesen</code>. Feldnamen und Beta-Kennungen legen die Anbieter fest und können sich ändern; maßgeblich ist ihre Dokumentation.</p>
+    </section>
+
+    <section class="block" id="briefing">
+      <h2>Briefing am Morgen und am Abend</h2>
+      <p class="breit">Das Werkzeug <code>briefing</code> liefert alle Artikel eines Zeitraums auf einmal, getrennt nach Meldungen und eigenen Artikeln. Der Assistent fasst sie zusammen, gruppiert nach Themen und mit Link zu jedem Beitrag. Es genügt, im Chat danach zu fragen.</p>
+      <ul class="briefings">
+        <li>{{ikon:morgen}}<div><b>Morgenbriefing</b><span>alles seit gestern 18 Uhr</span><q>Mach mir ein Morgenbriefing.</q></div></li>
+        <li>{{ikon:abend}}<div><b>Abendbriefing</b><span>alles seit heute 6 Uhr</span><q>Was war heute los?</q></div></li>
+        <li>{{ikon:tag}}<div><b>Tag und Woche</b><span>die letzten 24 Stunden oder 7 Tage</span><q>Fass mir die Woche zusammen.</q></div></li>
+        <li>{{ikon:uhr}}<div><b>Ab einem Zeitpunkt</b><span>alles seit einem Datum oder einer Uhrzeit</span><q>Was ist seit Donnerstag 12 Uhr erschienen?</q></div></li>
+      </ul>
+      <p class="klein breit">Zeiten gelten in deutscher Zeit. Wer das Briefing jeden Tag zur selben Zeit möchte, kann es in Assistenten mit geplanten Aufgaben einrichten oder über die APIs oben von einem eigenen Skript erzeugen lassen.</p>
+    </section>
+
+    <section class="block raster zwei-ungleich">
+      <div>
+        <h2>Fragen zum Ausprobieren</h2>
+        <ul class="beispiele">
+{{BEISPIELE}}
+        </ul>
+      </div>
+      <div>
+        <h2>Gut zu wissen</h2>
+        <div class="mit-ikon-absatz">{{ikon:hinweis}}<p>meinungsmache.de wählt Themen aus und ordnet sie teils wertend ein. Die Schnittstelle weist den Assistenten an, wiederzugeben, was dort steht, und das kenntlich zu machen: bei Meldungen mit der Originalquelle, bei eigenen Artikeln mit Autorin oder Autor, Meinungsbeiträge als Meinung. Eine eigene Bewertung soll er nicht hinzufügen und für eine ausgewogene Einordnung auf weitere Quellen hinweisen.</p></div>
+        <div class="mit-ikon-absatz">{{ikon:pruefen}}<p>Die Texte gehören meinungsmache.de bzw. den Originalmedien. Der Assistent soll zusammenfassen und verlinken, nicht vollständig wiedergeben. Die Aufbereitung geschieht maschinell und kann Lücken haben; maßgeblich ist der Artikel auf meinungsmache.de. Was ein Assistent aus den Daten macht, verantwortet er bzw. sein Anbieter.</p></div>
+        <div class="mit-ikon-absatz">{{ikon:post}}<p>Fehler gefunden? Bitte per E-Mail an <a href="mailto:dennis@deutschkaemer.info">dennis@deutschkaemer.info</a>, mit Link zum Artikel.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="werkzeuge">
+      <h2>Werkzeuge der Schnittstelle</h2>
+      <ul class="werkzeuge">
+        <li><code>briefing</code><span>alle Artikel eines Zeitraums: morgen, abend, tag, woche oder ab einem Zeitpunkt</span></li>
+        <li><code>neueste</code><span>Artikel nach Zeit, wahlweise nach Quelle, Art oder Autor gefiltert</span></li>
+        <li><code>bedeutung_suchen</code><span>Frage in eigenen Worten, findet auch andere Formulierungen</span></li>
+        <li><code>suchen</code><span>Volltext in Titel, Dachzeile und Text, mit Ausschnitt</span></li>
+        <li><code>artikel_lesen</code><span>vollständiger Artikel mit Quelle, Original-Link und den Links im Text</span></li>
+        <li><code>quellen</code><span>aus welchen Medien die Meldungen stammen, Autorinnen und Autoren der eigenen Artikel</span></li>
+        <li><code>ueberblick</code><span>Umfang, Zeitraum und Stand des letzten Abrufs</span></li>
+        <li><code>search</code> <code>fetch</code><span>Suche und Abruf nach der Konvention von ChatGPT</span></li>
+      </ul>
+    </section>
+
+    <section class="block" id="aufbau">
+      <h2>Wie es gemacht ist</h2>
+      <figure class="diagramm">
+{{DIAGRAMM}}
+      </figure>
+      <div class="raster zwei aufbau-text">
+        <div>
+        <p>Jede Stunde liest ein Abruf auf dem Webserver den RSS-Feed von meinungsmache.de. Neue Artikel und solche, die sich geändert haben, holt er von ihrer Seite und zerlegt sie in Titel, Dachzeile, Text, Quelle oder Autor, Bildquelle, Link zum Original und die Links im Text. Das Archiv seit Dezember 2025 kam einmalig über die Sitemap dazu. Der Abruf meldet sich mit einer eigenen Kennung und lässt zwischen zwei Seiten eine Pause.</p>
+        <p>Für die Suche nach Bedeutung berechnet ein lokales Modell (Qwen3-Embedding-0.6B auf eigener Hardware, ohne Cloud-Dienst) zu jedem Artikel Vektoren; lange Artikel werden dafür in Teile zerlegt. Eine Frage wird genauso umgerechnet und mit einer Volltextsuche kombiniert. Ein Sprachmodell braucht es für die Aufbereitung nicht.</p>
+        </div>
+        <div class="hinweisbox">
+          <h2>Quelle und Rechte</h2>
+        <p>Inhalte: <a href="https://meinungsmache.de">meinungsmache.de</a> – Nachrichten, Meinungen und Analysen. Meldungen fassen Berichte anderer Medien zusammen und verlinken das Original; eigene Artikel stammen von der Redaktion. Die Rechte an den Texten liegen bei meinungsmache.de bzw. den Originalmedien.</p>
+        <p><strong>Bearbeitung:</strong> Stündlicher Abruf und maschinelle Aufbereitung durch Dennis Deutschkämer, mit Zustimmung des Betreibers von meinungsmache.de. Inoffiziell und ohne Gewähr – maßgeblich sind die Artikel auf meinungsmache.de.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="quelltext">
+      <div class="quelltext">
+        <div class="qt-kopf">
+          <h2 class="mit-logo">{{ikon:code:ikon qt-zeichen}}Offener Quelltext</h2>
+          <p>Abruf, Schnittstelle und diese Seite liegen offen auf GitHub – unter MIT-Lizenz, mit Dokumentation auf Deutsch. Das Verfahren lässt sich auf andere Nachrichtenseiten mit RSS-Feed übertragen. Die Artikel selbst sind nicht Teil des Quelltexts.</p>
+          <div class="qt-knoepfe">
+            <a class="knopf" href="{{GITHUB}}">{{ikon:code}}Auf GitHub ansehen</a>
+            <a class="knopf leise" href="{{GITHUB}}/tree/main/docs">Dokumentation</a>
+          </div>
+          <p class="qt-pfad">github.com/rony-x2/rede-mit-meinungsmache</p>
+        </div>
+        <ul class="qt-teile">
+          <li><b>Abruf</b><span>RSS-Feed und Sitemap lesen, Artikelseiten zerlegen, Textteile einbetten, stündlich per Cron</span><code>server/lib/abruf.php</code></li>
+          <li><b>Schnittstelle</b><span>MCP-Server in PHP mit allen Werkzeugen und dem Briefing</span><code>server/lib/mcp_server.php</code></li>
+          <li><b>Datenbank</b><span>Tabellen für Artikel, Links, Vektoren und Abrufe</span><code>server/lib/schema.sql</code></li>
+          <li><b>Diese Seite</b><span>Vorlage, Bauskript, Gestaltung und das Diagramm als SVG</span><code>seite/</code></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block" id="datenschutz">
+      <h2>Datenschutz bei der Schnittstelle</h2>
+      <p class="breit">Verantwortlich ist Dennis Deutschkämer, Anschrift im <a href="https://plenarprotokolle.digital/impressum.php">Impressum von plenarprotokolle.digital</a>. Fragen zum Datenschutz bitte per E-Mail an <a href="mailto:dennis@deutschkaemer.info">dennis@deutschkaemer.info</a>.</p>
+      <div class="raster drei ds">
+        <div>
+          <h3>Was gespeichert wird</h3>
+          <p>Je Aufruf eines Werkzeugs: Zeitpunkt, Name des Werkzeugs, die übergebenen Suchangaben (auf 300 Zeichen gekürzt), Dauer und gegebenenfalls eine Fehlermeldung. Die Schnittstelle speichert keine IP-Adressen, keine Namen oder Kennungen der Nutzenden, setzt keine Cookies und erhält keine Inhalte der Unterhaltung. Es gibt kein Konto und keine Anmeldung.</p>
+          <p>Um die Zahl der Aufrufe je Client zu begrenzen, wird aus dem Adressbereich der Anfrage (die ersten drei Teile einer IPv4-Adresse, die ersten 48 Bit einer IPv6-Adresse) ein nicht umkehrbarer Abdruck gebildet und nur im Arbeitsspeicher vorgehalten.</p>
+        </div>
+        <div>
+          <h3>Wozu und wie lange</h3>
+          <p>Für den sicheren und stabilen Betrieb: Fehler finden, Überlastung verhindern und zählen, welche Werkzeuge genutzt werden. Rechtsgrundlage ist das berechtigte Interesse am sicheren Betrieb (Art. 6 Abs. 1 lit. f DSGVO). Es gibt keine Profile, keine Werbung und keine Weitergabe zu anderen Zwecken.</p>
+          <p>Die Aufrufprotokolle werden je Monat geführt und nach spätestens drei Monaten automatisch gelöscht. Der Abdruck für die Begrenzung verfällt nach spätestens zwei Stunden.</p>
+        </div>
+        <div>
+          <h3>Hosting und Weitergabe</h3>
+          <p>Die Schnittstelle läuft auf dem Webhosting der Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, als Auftragsverarbeiter nach Art. 28 DSGVO. Hetzner führt dabei nur die technischen Protokolle des Webservers, die für einen sicheren Betrieb nötig sind (<a href="https://www.hetzner.com/de/legal/privacy-policy/" rel="noopener">Datenschutzhinweise von Hetzner</a>). Für die Suche nach Bedeutung wird die Suchanfrage auf eigener Hardware in einen Vektor umgerechnet. Darüber hinaus gehen keine Daten an Dritte.</p>
+        </div>
+        <div>
+          <h3>Der Assistent</h3>
+          <p>Die Unterhaltung findet beim Anbieter des Assistenten statt (etwa Anthropic, OpenAI oder xAI), bei lokalen Programmen wie LM Studio auf dem eigenen Rechner. Er schickt der Schnittstelle je Aufruf nur die Angaben für das Werkzeug, nicht die Unterhaltung, und erhält die Antwort zurück. Für die Unterhaltung gelten die Bedingungen und Datenschutzhinweise des jeweiligen Anbieters.</p>
+        </div>
+        <div>
+          <h3>Diese Seite</h3>
+          <p>Die Kennzahlen und die Liste „Zuletzt erschienen“ lädt die Seite beim Aufruf aus der Datenbank nach. Dabei wird nichts protokolliert und kein Cookie gesetzt. Die Links führen zu meinungsmache.de; dort gelten deren Datenschutzhinweise.</p>
+        </div>
+        <div>
+          <h3>Rechte</h3>
+          <p>Betroffene haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Widerspruch (Art. 15 bis 21 DSGVO) sowie auf Beschwerde bei einer Datenschutz-Aufsichtsbehörde (Art. 77 DSGVO). Weil die Schnittstelle keine Angaben zu Personen speichert, lässt sich ein einzelner Aufruf in der Regel niemandem zuordnen.</p>
+          <p class="note">Stand: 21. November 2026.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="fuss">
+    <div class="rahmen">
+      <p><a href="https://deutschkaemer.info">deutschkaemer.info</a> · <a href="https://meinungsmache.de">meinungsmache.de</a> · <a href="{{GITHUB}}">Quelltext auf GitHub</a></p>
+    </div>
+  </footer>
+  <script src="seite.js?v={{V_JS}}" defer></script>
+</body>
+</html>
