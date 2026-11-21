@@ -6,13 +6,14 @@ from pathlib import Path
 
 BLASE = 'M7.5 3.5h9a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4h-5.5l-4.5 3.5v-3.5a4 4 0 0 1-4-4v-6a4 4 0 0 1 4-4z'
 ZEITUNG = 'M7.7 7.4h3.6v3.2H7.7zM13.3 7.6h3M13.3 10.4h3M7.7 13.3h8.6'
-FARBE = '#a8681a'   # Bernstein, angelehnt an die Kennfarbe von meinungsmache.de (#efd19f), dunkel genug für weiße Linien
+FARBE = '#C5A46D'   # Kennfarbe von meinungsmache.de
+LINIE = '#1b1f27'   # dunkle Linien: weiße erreichen auf dieser hellen Fläche nur 2,4 : 1, dunkle 7 : 1
 ZIEL = Path(__file__).resolve().parent.parent / 'server' / 'web'
 
 
 def kachel():
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5.5" fill="{FARBE}"/>'
-            f'<g fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" '
+            f'<g fill="none" stroke="{LINIE}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" '
             f'transform="translate(1.2 1) scale(.9)"><path d="{BLASE}"/><path d="{ZEITUNG}"/></g></svg>')
 
 

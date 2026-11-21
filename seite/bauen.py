@@ -20,7 +20,7 @@ LOGOS = HIER / 'logos'
 SEITE = 'https://poc.deutschkaemer.info/meinungsmache/'
 ADRESSE = SEITE + 'mcp'
 GITHUB = 'https://github.com/rony-x2/rede-mit-meinungsmache'
-V_CSS, V_JS = 2, 1
+V_CSS, V_JS = 3, 1
 BESCHREIBUNG = ('Die Nachrichten von meinungsmache.de mit Claude, ChatGPT, Grok oder einem lokalen Modell befragen: '
                 'MCP-Schnittstelle mit stündlich aktualisierten Artikeln, Morgen- und Abendbriefing, Antworten mit Link '
                 'zum Beitrag und zur Originalquelle.')

@@ -57,9 +57,9 @@ THEMEN = {
                   flaeche='var(--flaeche)', text='var(--text)', projekt='var(--projekt)', akzent='var(--akzent)', akzenttext='var(--akzent-text, var(--akzent))',
                   mono='var(--mono)'),
     'hell':  dict(bahn='#f6f8fa', linie='#d1d9e0', leise='#59636e', flaeche='#ffffff', text='#1f2328',
-                  projekt='#8f5a0e', akzent='#2f8a7b', akzenttext='#23756a', mono=MONO),
+                  projekt='#806333', akzent='#a47f41', akzenttext='#806333', mono=MONO),
     'dunkel': dict(bahn='#151b23', linie='#3d444d', leise='#9198a1', flaeche='#0d1117', text='#e6edf3',
-                   projekt='#e0a94f', akzent='#5eb8a8', akzenttext='#5eb8a8', mono=MONO),
+                   projekt='#C5A46D', akzent='#C5A46D', akzenttext='#C5A46D', mono=MONO),
 }
 
 H = 70  # Höhe eines Kastens

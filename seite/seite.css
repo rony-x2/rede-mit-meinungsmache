@@ -9,13 +9,11 @@ code { font-family: var(--mono); font-size: .9em; }
 .buehne { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: center; padding: clamp(32px, 5vw, 64px) 0 clamp(24px, 3vw, 40px); }
 .buehne h1 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.08; margin-bottom: 18px; }
 h1.mit-zeichen { display: flex; align-items: center; gap: .32em; }
-/* Projektfarbe (Logo-Familie): Bernstein, angelehnt an die Kennfarbe von meinungsmache.de; als Schrift auf hellem Grund dunkler */
-:root { --projekt: #e0a94f; }
-@media (prefers-color-scheme: light) { :root { --projekt: #8f5a0e; } }
-@supports (color: oklch(0% 0 0)) {
-  @media (color-gamut: p3) { :root { --projekt: oklch(78% 0.14 75); } }
-  @media (color-gamut: p3) and (prefers-color-scheme: light) { :root { --projekt: oklch(50% 0.115 65); } }
-}
+/* Farben dieser Seite: Kennfarbe von meinungsmache.de (#C5A46D) als Akzent- und Projektfarbe statt des Türkis der PoC-Seite.
+   Im dunklen Bild unverändert (7–8 : 1 auf dem Grund). Im hellen Bild reicht sie auf Weiß nicht (2,2 : 1): dort dieselbe Farbe
+   dunkler für Linien und Symbole (3,4 : 1) und für Schrift (5,2 : 1); als Fläche bleibt sie, mit dunkler Schrift (7 : 1). */
+:root { --marke: #C5A46D; --akzent: #C5A46D; --akzent-text: #C5A46D; --projekt: #C5A46D; }
+@media (prefers-color-scheme: light) { :root { --akzent: #a47f41; --akzent-text: #806333; --projekt: #806333; } }
 .projektzeichen { width: 1.15em; height: 1.15em; flex: none; color: var(--projekt); stroke-width: 1.5; }
 .lead { color: var(--text-2); font-size: clamp(1.02rem, 1.3vw, 1.15rem); margin: 0 0 24px; max-width: 62ch; }
 .adresse-titel { margin: 0 0 6px; font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); }
@@ -44,9 +42,7 @@ h1.mit-zeichen { display: flex; align-items: center; gap: .32em; }
 .g { grid-area: 1 / 1; display: flex; flex-direction: column; gap: 12px; opacity: 0; visibility: hidden; transition: opacity .6s ease, visibility 0s linear .6s; }
 .g.aktiv { opacity: 1; visibility: visible; transition: opacity .6s ease; }
 .blase { max-width: min(94%, 600px); padding: 12px 16px; border-radius: 16px; line-height: 1.5; }
-.blase.frage { align-self: flex-end; background: var(--akzent); color: var(--bg); border-bottom-right-radius: 4px; font-size: clamp(1rem, 1.5vw, 1.18rem); font-weight: 600; min-height: 1.5em; }
-/* Im hellen Bild die dunklere Akzentfarbe, damit die Frage auch in kleiner Schrift 4,5 : 1 erreicht */
-@media (prefers-color-scheme: light) { .blase.frage { background: var(--akzent-text); } }
+.blase.frage { align-self: flex-end; background: var(--marke); color: #1b1f27; border-bottom-right-radius: 4px; font-size: clamp(1rem, 1.5vw, 1.18rem); font-weight: 600; min-height: 1.5em; }
 .frage-text::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -.12em; background: currentColor; opacity: 0; }
 .g.laeuft:not(.gefragt) .frage-text::after { opacity: 1; animation: cursor .9s steps(1) infinite; }
 .werkzeug-zeile { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; font-family: var(--mono); font-size: .78rem; color: var(--text-2); }

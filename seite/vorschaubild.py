@@ -23,7 +23,7 @@ body {{ box-sizing: border-box; padding: 72px 84px; display: flex; flex-directio
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #e6e8ec;
   background: radial-gradient(90% 120% at 0% 0%, #2a2114 0%, #0f1115 55%), #0f1115; }}
 .kopf {{ display: flex; align-items: center; gap: 44px; }}
-.kicker {{ margin: 0 0 14px; font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #e0a94f; }}
+.kicker {{ margin: 0 0 14px; font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #C5A46D; }}
 h1 {{ margin: 0; font-size: 80px; line-height: 1.02; letter-spacing: -.01em; }}
 p.unter {{ margin: 0; max-width: 980px; font-size: 32px; line-height: 1.35; color: #b4bcc8; }}
 .fuss {{ display: flex; justify-content: space-between; align-items: center; font-size: 26px; color: #9aa3b2; }}

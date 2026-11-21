@@ -30,8 +30,8 @@ Kennzahlen und „Zuletzt erschienen“ schreibt `bauen.py` mit dem Stand beim B
 
 ## Gestaltung
 
-- **Zeichen:** Die Logo-Familie „Rede mit …“ zeigt eine Sprechblase (Chat mit einer Quelle) mit dem Projekt darin, hier eine Zeitungsseite. Die Kachel ist bernsteinfarben (`#a8681a`), angelehnt an die Kennfarbe von meinungsmache.de (`#efd19f`), aber dunkel genug für weiße Linien.
-- **Farben:** Die Projektfarbe `--projekt` (Bernstein) markiert Zeichen, Dateinamen und die Briefing-Piktogramme; die Akzentfarbe der PoC-Seite (Türkis) bleibt für Bedienelemente. Im hellen Bild ist die Projektfarbe als Schrift dunkler (`#8f5a0e`), damit sie auf Weiß mindestens 4,5 : 1 erreicht. Auf Bildschirmen mit großem Farbraum (Display P3) kommen dieselben Farben in `oklch` mit mehr Sättigung.
+- **Zeichen:** Die Logo-Familie „Rede mit …“ zeigt eine Sprechblase (Chat mit einer Quelle) mit dem Projekt darin, hier eine Zeitungsseite. Die Kachel hat die Kennfarbe von meinungsmache.de (`#C5A46D`), die Linien sind dunkel: Weiße Linien erreichen auf der hellen Fläche nur 2,4 : 1, dunkle 7 : 1.
+- **Farben:** Die Kennfarbe ist auf dieser Seite Akzent- und Projektfarbe (statt des Türkis der übrigen PoC-Seite): Knöpfe, Symbole, Links, die Fragen in der Beispiel-Unterhaltung. Im dunklen Bild steht sie unverändert (7–8 : 1). Im hellen Bild reicht sie auf Weiß nicht; dort kommt derselbe Farbton dunkler für Linien und Symbole (`#a47f41`, 3,4 : 1) und für Schrift (`#806333`, 5,2 : 1). Als Fläche, etwa hinter den Fragen, bleibt sie in beiden Bildern, mit dunkler Schrift (7 : 1).
 - **Hell und dunkel** nach Systemeinstellung, volle Breite auf großen Bildschirmen, voll bedienbar ab 320 px Breite; Menü auf dem Smartphone als Klappmenü.
 - **Bewegung** ist dezent (Beispiel-Unterhaltung, Ablauf, Aufleuchten neuer Artikel) und entfällt bei `prefers-reduced-motion`.
 
