@@ -30,7 +30,7 @@ Artikel nach Zeit, neueste zuerst, mit Kurztext (320 Zeichen). Filter: `seit`, `
 
 ### `bedeutung_suchen`
 
-Findet Artikel zu einer Frage oder einem Thema in eigenen Worten. Die Frage wird mit Suchanweisung eingebettet ([abruf.md](abruf.md#einbettung)) und exakt mit allen Textteilen verglichen (Kosinusabstand, je Artikel der beste Teil). Parallel läuft eine Volltextsuche in natürlicher Sprache. Beide Ranglisten (je 60 Plätze) werden mit Reciprocal Rank Fusion (k = 60, gleich gewichtet) zusammengeführt. Das Feld `naehe` (1 − Abstand) zeigt die inhaltliche Nähe. Ist die Einbettung nicht erreichbar, antwortet das Werkzeug nur aus dem Volltext und sagt das im Feld `verfahren`. Optional `seit`, `bis`, `anzahl` (bis 30).
+Findet Artikel zu einer Frage oder einem Thema in eigenen Worten. Die Frage wird mit Suchanweisung eingebettet ([abruf.md](abruf.md#einbettung)) und exakt mit allen Textteilen verglichen (Kosinusabstand, je Artikel der beste Teil). Parallel läuft eine Volltextsuche mit den tragenden Wörtern der Frage (ohne Füllwörter wie „was“, „sich“, „beim“, jeweils als Wortanfang). Beide Ranglisten (je 60 Plätze) werden mit Reciprocal Rank Fusion (k = 60) zusammengeführt, der Volltext mit halbem Gewicht: Bei Nachrichten trägt die Bedeutung mehr, die Wörter helfen bei Namen und seltenen Begriffen. Das Feld `naehe` (1 − Abstand) zeigt die inhaltliche Nähe. Ist die Einbettung nicht erreichbar, antwortet das Werkzeug nur aus dem Volltext und sagt das im Feld `verfahren`. Optional `seit`, `bis`, `anzahl` (bis 30).
 
 ### `suchen`
 

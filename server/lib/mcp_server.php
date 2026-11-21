@@ -441,6 +441,26 @@ function mm_ausschnitt(string $text, array $woerter, int $breite = 320): string
     return ($start > 0 ? '…' : '') . trim(mb_substr($text, $start, $breite)) . ($start + $breite < mb_strlen($text) ? '…' : '');
 }
 
+/** Tragende Wörter einer Frage für die Volltextsuche: ohne deutsche Füllwörter, mindestens drei Buchstaben. */
+function mm_suchwoerter(string $frage): array
+{
+    static $fuell = ['aber','alle','allem','allen','aller','alles','als','also','am','an','auch','auf','aus','bei','beim','bin','bis',
+        'bitte','das','dass','dem','den','der','des','die','dies','diese','diesem','diesen','dieser','dieses','doch','dort','durch',
+        'ein','eine','einem','einen','einer','eines','gab','gibt','gerade','gestern','habe','haben','hat','heute','hier','ich','ihr',
+        'im','in','ist','jetzt','kann','mir','mit','nach','neu','neue','neues','nicht','noch','nur','oder','sein','seit','sich','sie',
+        'sind','so','steht','über','um','und','uns','unter','vom','von','vor','war','waren','was','weiß','welche','welcher','welches',
+        'wenn','wer','werden','wie','wieso','wird','wo','woche','zu','zum','zur','tut','läuft','meinungsmache','zeig',
+        'erzähl','sag','schreibt','geschrieben','berichtet','artikel','meldung','meldungen','thema','themen','etwas','eigentlich'];
+    preg_match_all('/[\p{L}\p{N}]+/u', mb_strtolower($frage), $m);
+    $aus = [];
+    foreach ($m[0] as $w) {
+        if (mb_strlen($w) >= 3 && !in_array($w, $fuell, true)) {
+            $aus[$w] = true;
+        }
+    }
+    return array_slice(array_keys($aus), 0, 12);
+}
+
 function mm_w_bedeutung(array $a): array
 {
     $frage = trim((string)($a['frage'] ?? ''));
@@ -466,12 +486,16 @@ function mm_w_bedeutung(array $a): array
             $naehe[$id] = round(1 - (float)$r['d'], 3);
         }
     }
-    // Volltext (natürliche Sprache) als zweite Rangliste
-    $st = $db->prepare("SELECT a.id FROM mm_artikel a WHERE MATCH(titel, unterzeile, text) AGAINST(? IN NATURAL LANGUAGE MODE) $zeit
-                        ORDER BY MATCH(titel, unterzeile, text) AGAINST(? IN NATURAL LANGUAGE MODE) DESC LIMIT 60");
-    $st->execute(array_merge([$frage], $par, [$frage]));
-    foreach ($st->fetchAll(PDO::FETCH_COLUMN) as $i => $id) {
-        $punkte[(int)$id] = ($punkte[(int)$id] ?? 0) + 1.0 / (60 + $i + 1);
+    // Volltext als zweite Rangliste: nur die tragenden Wörter der Frage (ohne Füllwörter), als Wortanfang, halb gewichtet
+    $woerter = mm_suchwoerter($frage);
+    if ($woerter) {
+        $bool = implode(' ', array_map(static fn($w) => $w . '*', $woerter));
+        $st = $db->prepare("SELECT a.id FROM mm_artikel a WHERE MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) $zeit
+                            ORDER BY MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) DESC LIMIT 60");
+        $st->execute(array_merge([$bool], $par, [$bool]));
+        foreach ($st->fetchAll(PDO::FETCH_COLUMN) as $i => $id) {
+            $punkte[(int)$id] = ($punkte[(int)$id] ?? 0) + 0.5 / (60 + $i + 1);
+        }
     }
     arsort($punkte);
     $ids = array_slice(array_keys($punkte), 0, $n);
