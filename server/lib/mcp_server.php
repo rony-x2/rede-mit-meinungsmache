@@ -15,7 +15,7 @@ require_once __DIR__ . '/anreicherung.php';
 
 const MM_VERSIONEN     = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const MM_NAME          = 'meinungsmache';
-const MM_VERSION       = '0.1.0';
+const MM_VERSION       = '0.2.0';
 const MM_WEB           = 'https://poc.deutschkaemer.info/meinungsmache/';
 const MM_ICONS = [
     ['src' => MM_WEB . 'favicon.svg', 'mimeType' => 'image/svg+xml', 'sizes' => ['any']],

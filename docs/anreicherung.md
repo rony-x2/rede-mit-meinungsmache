@@ -28,7 +28,7 @@ Der Webserver erreicht die Grafikkarte zu Hause nicht. Deshalb holt sich ein kle
 4. Der Server übernimmt ein Ergebnis nur, wenn der Artikel noch dieselbe Fassung hat. Hat das Programm das Modell selbst geladen, entlädt es es am Ende wieder.
 5. Der nächste Abruf (`abruf.php`) bettet Fragen und Suchbegriffe ein, **mit derselben Anweisung wie Suchanfragen**. So stehen sich beim Suchen Frage und Frage gegenüber, nicht Frage und Artikeltext.
 
-Ändert sich ein Artikel auf meinungsmache.de, verwirft der Abruf Vektoren und Anreicherung; beide entstehen neu. Bis ein neuer Artikel angereichert ist, findet ihn die Suche über Text und Volltext.
+Ändert sich ein Artikel auf meinungsmache.de, verwirft der Abruf Vektoren und Anreicherung; beide entstehen neu. Bis ein neuer Artikel angereichert ist, findet ihn die Suche über seinen Text.
 
 Zugang: Das Programm schickt ein Kennwort in der Kopfzeile `X-Token`. Es liegt auf dem Rechner mit der Karte unter `~/.config/mm_anreichern/token`, auf dem Server nur als SHA-256 in `~/poc/mm/anreicherung.hash`.
 

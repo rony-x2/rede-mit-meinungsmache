@@ -205,10 +205,12 @@ pre.code { margin: 0; padding: 12px 14px; overflow-x: auto; border: 1px solid va
 
 /* Zuletzt erschienen (wird von seite.js aus stand.php aktualisiert) */
 .neueste { list-style: none; margin: 0 0 10px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.neueste li { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); transition: border-color .2s; }
+.neueste li { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--flaeche); transition: border-color .2s; }
 .neueste li:hover { border-color: color-mix(in oklab, var(--projekt) 55%, var(--linie)); }
 .neueste a { color: var(--text); font-weight: 600; line-height: 1.35; text-decoration: none; }
 .neueste a:hover, .neueste a:focus-visible { text-decoration: underline; }
+.neueste a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }   /* ganze Karte anklickbar */
+.neueste li:has(a:focus-visible) { border-color: var(--akzent); }
 .n-meta { display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: .8rem; color: var(--text-2); font-variant-numeric: tabular-nums; }
 .n-art { font-family: var(--mono); font-size: .76rem; color: var(--projekt); }
 .neueste li.frisch { animation: frisch 1.2s ease-out; }

@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rede mit Meinungsmache – Proof of Concept</title>
-  <meta name="description" content="Die Nachrichten von meinungsmache.de mit Claude, ChatGPT, Grok oder einem lokalen Modell befragen: MCP-Schnittstelle mit stündlich aktualisierten Artikeln, Morgen- und Abendbriefing, Antworten mit Link zum Beitrag und zur Originalquelle.">
+  <meta name="description" content="Die Nachrichten von meinungsmache.de mit Claude, ChatGPT oder einem lokalen Modell befragen: stündlich aktuell, mit Morgen- und Abendbriefing und Links zur Quelle.">
   <link rel="canonical" href="https://poc.deutschkaemer.info/meinungsmache/">
   <!-- Open Graph (Vorschau beim Teilen) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="poc.deutschkaemer.info">
   <meta property="og:locale" content="de_DE">
   <meta property="og:title" content="Rede mit Meinungsmache">
-  <meta property="og:description" content="Die Nachrichten von meinungsmache.de mit Claude, ChatGPT, Grok oder einem lokalen Modell befragen: MCP-Schnittstelle mit stündlich aktualisierten Artikeln, Morgen- und Abendbriefing, Antworten mit Link zum Beitrag und zur Originalquelle.">
+  <meta property="og:description" content="Die Nachrichten von meinungsmache.de mit Claude, ChatGPT oder einem lokalen Modell befragen: stündlich aktuell, mit Morgen- und Abendbriefing und Links zur Quelle.">
   <meta property="og:url" content="https://poc.deutschkaemer.info/meinungsmache/">
   <meta property="og:image" content="https://poc.deutschkaemer.info/meinungsmache/og.png">
   <meta property="og:image:type" content="image/png">
@@ -27,7 +27,7 @@
   <meta name="theme-color" content="#0f1115">
   <script>document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="/style.css?v=5">
-  <link rel="stylesheet" href="seite.css?v=4">
+  <link rel="stylesheet" href="seite.css?v=5">
   <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -37,7 +37,7 @@
    "@id": "https://poc.deutschkaemer.info/meinungsmache/#seite",
    "url": "https://poc.deutschkaemer.info/meinungsmache/",
    "name": "Rede mit Meinungsmache",
-   "description": "Die Nachrichten von meinungsmache.de mit Claude, ChatGPT, Grok oder einem lokalen Modell befragen: MCP-Schnittstelle mit stündlich aktualisierten Artikeln, Morgen- und Abendbriefing, Antworten mit Link zum Beitrag und zur Originalquelle.",
+   "description": "Die Nachrichten von meinungsmache.de mit Claude, ChatGPT oder einem lokalen Modell befragen: stündlich aktuell, mit Morgen- und Abendbriefing und Links zur Quelle.",
    "inLanguage": "de",
    "dateModified": "2026-11-21",
    "isPartOf": {
@@ -435,13 +435,13 @@
         <h2>Fragen zum Ausprobieren</h2>
         <ul class="beispiele">
           <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Mach mir ein Morgenbriefing.</span></li>
-          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Was war heute los? Bitte nach Themen geordnet.</span></li>
-          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Was schreibt Meinungsmache über das Bürgergeld?</span></li>
-          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Welche eigenen Artikel hat die Redaktion diese Woche veröffentlicht?</span></li>
-          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Aus welchen Medien stammen die Meldungen am häufigsten?</span></li>
-          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Fass mir alles zur Wahl in Serbien zusammen, mit Links zu den Originalen.</span></li>
-          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Was gab es seit Montag zum Klimaschutz?</span></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Was gab es diese Woche zu Klima und Umwelt?</span></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Welche eigenen Artikel hat die Redaktion zuletzt veröffentlicht?</span></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Was schreibt Meinungsmache über die Stromsteuer?</span></li>
           <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Zeig mir die letzten Meldungen aus der Tagesschau.</span></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Worüber wurde in den letzten Tagen am meisten berichtet?</span></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Aus welchen Medien stammen die Meldungen am häufigsten?</span></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/></svg><span>Gibt es Neues zur Ukraine? Bitte mit Links zu den Originalen.</span></li>
         </ul>
       </div>
       <div>

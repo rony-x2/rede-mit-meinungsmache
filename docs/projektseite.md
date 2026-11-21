@@ -9,7 +9,7 @@ Die Seite <https://poc.deutschkaemer.info/meinungsmache/> ist statisches HTML. S
 | `vorlage.html` | Gerüst der Seite mit Platzhaltern `{{…}}` |
 | `bauen.py` | baut `index.html`: Logos und Piktogramme inline, Beispiel-Unterhaltung, Diagramm, strukturierte Daten, aktueller Stand |
 | `beispiele.json` | die Beispiel-Unterhaltungen oben rechts (Frage, Werkzeug, gekürzte Antwort, Link) |
-| `diagramm.py` | Ablaufdiagramm als SVG, quer und hochkant; schreibt auch `docs/bilder/ablauf-*.svg` |
+| `diagramm.py` | Diagramme als SVG: Ablauf und Suche (quer und hochkant) sowie die Werte des Probelaufs; schreibt auch `docs/bilder/ablauf-*.svg`, `suche-*.svg` und `probelauf-*.svg` |
 | `zeichen.py` | Projektzeichen; schreibt `favicon.svg` und die PNG-Größen nach `server/web/` |
 | `vorschaubild.py` | Vorschaubild für Open Graph (`server/web/og.png`, 1200 × 630) |
 | `seite.css`, `seite.js` | Gestaltung und Verhalten dieser Seite |
@@ -18,7 +18,7 @@ Die Seite <https://poc.deutschkaemer.info/meinungsmache/> ist statisches HTML. S
 
 ```bash
 cd seite
-python3 diagramm.py        # docs/bilder/ablauf-hell.svg und -dunkel.svg
+python3 diagramm.py        # docs/bilder/ablauf-, suche- und probelauf-*.svg (hell und dunkel)
 python3 zeichen.py         # Favicons (braucht Playwright mit Chromium)
 python3 vorschaubild.py    # og.png (braucht Playwright mit Chromium)
 python3 bauen.py           # index.html; liest Kennzahlen und neueste Artikel von der Schnittstelle

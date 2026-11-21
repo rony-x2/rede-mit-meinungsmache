@@ -20,10 +20,9 @@ LOGOS = HIER / 'logos'
 SEITE = 'https://poc.deutschkaemer.info/meinungsmache/'
 ADRESSE = SEITE + 'mcp'
 GITHUB = 'https://github.com/rony-x2/rede-mit-meinungsmache'
-V_CSS, V_JS = 4, 1
-BESCHREIBUNG = ('Die Nachrichten von meinungsmache.de mit Claude, ChatGPT, Grok oder einem lokalen Modell befragen: '
-                'MCP-Schnittstelle mit stündlich aktualisierten Artikeln, Morgen- und Abendbriefing, Antworten mit Link '
-                'zum Beitrag und zur Originalquelle.')
+V_CSS, V_JS = 5, 1
+BESCHREIBUNG = ('Die Nachrichten von meinungsmache.de mit Claude, ChatGPT oder einem lokalen Modell befragen: '
+                'stündlich aktuell, mit Morgen- und Abendbriefing und Links zur Quelle.')
 
 IKONEN = {
     'frage': '<path d="M4 5.5h16v10.5H10l-5 4v-4H4z"/><path d="M8.5 10.8h.01M12 10.8h.01M15.5 10.8h.01"/>',
@@ -95,13 +94,13 @@ STAND_BEISPIELE = 'Stand 21. November 2026'
 GESPRAECHE = []   # wird unten aus beispiele.json gelesen
 BEISPIELE = [
     'Mach mir ein Morgenbriefing.',
-    'Was war heute los? Bitte nach Themen geordnet.',
-    'Was schreibt Meinungsmache über das Bürgergeld?',
-    'Welche eigenen Artikel hat die Redaktion diese Woche veröffentlicht?',
-    'Aus welchen Medien stammen die Meldungen am häufigsten?',
-    'Fass mir alles zur Wahl in Serbien zusammen, mit Links zu den Originalen.',
-    'Was gab es seit Montag zum Klimaschutz?',
+    'Was gab es diese Woche zu Klima und Umwelt?',
+    'Welche eigenen Artikel hat die Redaktion zuletzt veröffentlicht?',
+    'Was schreibt Meinungsmache über die Stromsteuer?',
     'Zeig mir die letzten Meldungen aus der Tagesschau.',
+    'Worüber wurde in den letzten Tagen am meisten berichtet?',
+    'Aus welchen Medien stammen die Meldungen am häufigsten?',
+    'Gibt es Neues zur Ukraine? Bitte mit Links zu den Originalen.',
 ]
 
 

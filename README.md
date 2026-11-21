@@ -79,6 +79,8 @@ cp server/config.beispiel.php ~/poc/config.php   # Zugangsdaten eintragen
 # Erster Lauf mit Archiv (legt die Tabellen an), danach stündlich
 php ~/poc/mm/abruf.php --nachholen
 ( crontab -l; echo '17 * * * * flock -n $HOME/.tmp/mm_abruf.lck php $HOME/poc/mm/abruf.php --still' ) | crontab -
+
+# Optional: Anreicherung auf einem Rechner mit Grafikkarte (arbeiter/mm_anreichern.py), siehe docs/anreicherung.md
 ```
 
 Für eine andere Nachrichtenseite mit RSS-Feed sind vor allem die Adressen und die Zerlegung der Artikelseite in `quelle.php` anzupassen.
