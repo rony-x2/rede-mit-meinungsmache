@@ -10,13 +10,13 @@ Das Projekt ist ein Proof of Concept auf [poc.deutschkaemer.info](https://poc.de
 
 ## Was die Schnittstelle kann
 
-meinungsmache.de veröffentlicht zwei Arten von Artikeln: **Meldungen**, die einen Bericht eines anderen Mediums zusammenfassen und das Original verlinken (etwa Tagesschau, Die Zeit, Süddeutsche Zeitung), und **eigene Artikel** der Redaktion, oft Erfahrungsberichte, Analysen oder Meinungsbeiträge. Ein Abruf holt sie stündlich, das Archiv reicht zurück bis Dezember 2025.
+meinungsmache.de veröffentlicht zwei Arten von Artikeln: **Meldungen**, die einen Bericht eines anderen Mediums zusammenfassen und das Original verlinken (etwa Tagesschau, Die Zeit, Süddeutsche Zeitung), und **eigene Artikel** der Redaktion, oft Erfahrungsberichte, Analysen oder Meinungsbeiträge. Ein Abruf holt sie stündlich, das Archiv reicht zurück bis Dezember 2025. Ein lokales Sprachmodell ordnet jedem Artikel ein bis drei Themen zu und schreibt Fragen, über die die Suche ihn auch in anderen Worten findet.
 
 | Werkzeug | Zweck |
 |---|---|
 | `briefing` | alle Artikel eines Zeitraums für ein Briefing: `morgen` (seit gestern 18 Uhr), `abend` (seit heute 6 Uhr), `tag`, `woche` oder ab einem Zeitpunkt, mit Themen und wahlweise auf ein Thema eingegrenzt |
 | `neueste` | Artikel nach Zeit, wahlweise nach Zeitraum, Quelle, Art, Autor oder Thema gefiltert |
-| `bedeutung_suchen` | Suche nach Bedeutung: Frage in eigenen Worten (Vektoren und Volltext zusammen) |
+| `bedeutung_suchen` | Suche nach Bedeutung: Frage in eigenen Worten, verglichen mit Artikeltext und vorab erzeugten Fragen |
 | `suchen` | Volltextsuche in Titel, Dachzeile und Text |
 | `artikel_lesen` | ein Artikel vollständig, mit Quelle, Link zum Original und den Links im Text |
 | `quellen` | aus welchen Medien die Meldungen stammen; Autorinnen und Autoren der eigenen Artikel |
@@ -29,7 +29,7 @@ Die Schnittstelle gibt dem Modell Regeln für die Antwort mit: wiedergeben, was 
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/bilder/ablauf-dunkel.svg">
-  <img alt="Ablauf: Stündlich prüft ein Abruf den RSS-Feed von meinungsmache.de, für das Archiv einmalig die Sitemap. Neue Artikel werden von ihrer Seite gelesen, zerlegt und lokal eingebettet; alles landet in MariaDB. Bei jeder Frage ruft ein KI-Assistent die MCP-Schnittstelle auf, die in der Datenbank sucht und Artikel mit Links zurückgibt." src="docs/bilder/ablauf-hell.svg" width="100%">
+  <img alt="Ablauf: Stündlich prüft ein Abruf den RSS-Feed von meinungsmache.de, für das Archiv einmalig die Sitemap. Neue Artikel werden von ihrer Seite gelesen und zerlegt. Ein lokales Sprachmodell (Gemma 4) schreibt Fragen, Suchbegriffe und Themen, ein lokales Einbettungsmodell berechnet Vektoren für Text und Fragen; alles landet in MariaDB. Bei jeder Frage ruft ein KI-Assistent die MCP-Schnittstelle auf, die in der Datenbank sucht und Artikel mit Links zurückgibt." src="docs/bilder/ablauf-hell.svg" width="100%">
 </picture>
 
 1. **Abruf:** `abruf.php` läuft stündlich per Cron. Es liest den RSS-Feed, holt neue Artikel von ihrer Seite und zerlegt sie in Titel, Dachzeile, Text, Quelle oder Autor, Link zum Original und die Links im Text. Junge Artikel werden einige Male erneut geprüft, falls sie nachträglich bearbeitet wurden ([docs/abruf.md](docs/abruf.md)).
