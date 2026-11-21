@@ -34,7 +34,7 @@ Findet Artikel zu einer Frage oder einem Thema in eigenen Worten. Die Frage wird
 
 ### `suchen`
 
-Volltextsuche (MariaDB `FULLTEXT`, Boolean Mode) in Titel, Dachzeile und Text. Alle Wörter müssen vorkommen; `Wort*` sucht den Wortanfang, `"feste Wendung"` in Anführungszeichen eine Wortfolge. Wörter unter drei Buchstaben werden übergangen. Treffer neueste zuerst, mit Ausschnitt um die erste Fundstelle. Optional `seit`, `bis`, `anzahl` (bis 50).
+Volltextsuche (MariaDB `FULLTEXT`, Boolean Mode) in Titel, Dachzeile und Text. Alle Wörter müssen vorkommen; `Wort*` sucht den Wortanfang, `"feste Wendung"` in Anführungszeichen eine Wortfolge. Wörter unter drei Buchstaben werden übergangen. Treffer neueste zuerst, mit Ausschnitt um die erste Fundstelle. Enthält kein Artikel alle Wörter, sucht das Werkzeug mit den einzelnen Wörtern weiter (die besten Übereinstimmungen zuerst) und sagt das im Feld `hinweis`; im Probelauf hatte ein Modell sonst bei fünf Suchwörtern nichts gefunden und aufgegeben ([ausblick.md](ausblick.md#probelauf)). Optional `seit`, `bis`, `anzahl` (bis 50).
 
 ### `artikel_lesen`
 

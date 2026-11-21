@@ -41,6 +41,7 @@
         <a href="#werkzeuge">Werkzeuge</a>
         <a href="#aufbau">Aufbau</a>
         <a href="#quelltext">Quelltext</a>
+        <a href="#ausblick">Ausblick</a>
         <a href="#datenschutz">Datenschutz</a>
         <a href="/">Alle PoCs</a>
       </nav>
@@ -297,6 +298,15 @@
       </div>
     </section>
 
+    <section class="block" id="suche">
+      <h2>So findet die Suche die passenden Artikel</h2>
+      <p class="breit">Eine Frage in eigenen Worten wird von einem kleinen lokalen Modell (Qwen3-Embedding) in einen Vektor umgerechnet und mit zwei Listen verglichen: mit den Fragen, die Gemma&nbsp;4 vorab zu jedem Artikel geschrieben hat, und mit dem Text der Artikel. Beide Ranglisten werden zusammengeführt, die erzeugten Fragen zählen dabei etwas mehr. Die Volltextsuche springt nur ein, wenn die Umrechnung gerade nicht erreichbar ist. Ein Briefing sucht dagegen gar nicht: Es nimmt alle Artikel des Zeitraums und gliedert sie nach ihren Themen.</p>
+      <figure class="diagramm">
+{{SUCHE}}
+      </figure>
+      <p class="breit klein">Gemessen mit 34 Testfragen in Alltagssprache: Der passende Artikel steht bei 31 Fragen auf Platz 1 und bei allen unter den ersten fünf (vorher, nur mit Artikeltext und Volltext: 25 und 32). Am meisten helfen die erzeugten Fragen, wenn jemand andere Wörter benutzt als der Artikel – „Wie sind die Zwischenwahlen in Amerika ausgegangen?“ stieg von Platz 14 auf Platz 1. Verfahren und Messung: <a href="{{GITHUB}}/blob/main/docs/anreicherung.md">docs/anreicherung.md</a>.</p>
+    </section>
+
     <section class="block" id="quelltext">
       <div class="quelltext">
         <div class="qt-kopf">
@@ -314,6 +324,106 @@
           <li><b>Schnittstelle</b><span>MCP-Server in PHP mit allen Werkzeugen und dem Briefing</span><code>server/lib/mcp_server.php</code></li>
           <li><b>Diese Seite</b><span>Vorlage, Bauskript, Gestaltung und das Diagramm als SVG</span><code>seite/</code></li>
         </ul>
+      </div>
+    </section>
+
+    <section class="block" id="ausblick">
+      <h2>Ausblick: direkt auf meinungsmache.de</h2>
+      <p class="breit">Bisher braucht man einen eigenen KI-Assistenten, um mit den Nachrichten zu sprechen. meinungsmache.de könnte das auch selbst anbieten, ohne Konto und ohne Einrichtung. Die Schnittstelle bliebe dafür unverändert; dazu käme ein Sprachmodell, das sie benutzt. Drei Wege wären denkbar – umgesetzt ist keiner davon.</p>
+      <article class="fall fall-breit">
+        <p class="fall-nr">Fall 1</p>
+        <h3>Fertiges Briefing, morgens und abends</h3>
+        <ol class="kette" aria-label="Weg eines Briefings">
+          <li><b>Zeitplan</b><span>etwa 7 und 18 Uhr</span></li>
+          <li><b>Briefing schreiben</b><span>Sprachmodell mit dem Werkzeug briefing</span></li>
+          <li><b>Redaktion schaut drüber</b><span>auf Wunsch, vor dem Veröffentlichen</span></li>
+          <li><b>Seite, RSS, Newsletter</b><span>für alle dasselbe Briefing</span></li>
+        </ol>
+        <p>Statt jede Frage einzeln zu beantworten, schreibt ein Sprachmodell zweimal am Tag ein Briefing aus den neuen Artikeln, gegliedert nach Themen und mit Links zu jedem Beitrag. Es erscheint als eigene Seite, im RSS-Feed oder als Newsletter. Fragen stellen kann man dort nicht, dafür kostet es fast nichts und lässt sich vor dem Erscheinen prüfen.</p>
+        <h4>Was nötig wäre</h4>
+        <ul class="noetig">
+          <li>ein geplanter Lauf, der das Briefing zur festen Zeit erzeugt</li>
+          <li>ein Sprachmodell: auf eigener Hardware (im Testlauf rund 10 bis 15 Sekunden je Briefing) oder bei einem Anbieter</li>
+          <li>ein Platz für die Ausgabe: Seite, RSS-Feed oder Newsletter-Versand</li>
+          <li>auf Wunsch eine Freigabe durch die Redaktion vor dem Veröffentlichen</li>
+        </ul>
+        <dl class="eckdaten">
+          <div><dt>Antworten</dt><dd>einheitlich für alle, vorab prüfbar</dd></div>
+          <div><dt>Kosten</dt><dd>zwei Modellaufrufe am Tag: lokal nur Strom, beim Anbieter je nach Modell wenige Cent bis etwa 1,50 Euro im Monat</dd></div>
+          <div><dt>Last</dt><dd>keine, das Briefing ist eine fertige Seite</dd></div>
+          <div><dt>Datenschutz</dt><dd>es werden keine Fragen von Leserinnen und Lesern verarbeitet</dd></div>
+        </dl>
+      </article>
+      <div class="raster zwei faelle">
+        <article class="fall">
+          <p class="fall-nr">Fall 2</p>
+          <h3>Chat über einen KI-Anbieter, etwa Claude</h3>
+          <ol class="kette" aria-label="Weg einer Frage">
+            <li><b>Browser</b><span>Chatfenster</span></li>
+            <li><b>Chat-Endpunkt</b><span>PHP auf der Seite</span></li>
+            <li><b>Claude API</b><span>Modell bei Anthropic</span></li>
+            <li><b>MCP-Schnittstelle</b><span>wie heute</span></li>
+          </ol>
+          <p>Ein kleiner Endpunkt auf dem Webserver nimmt die Frage entgegen und schickt sie an die Claude API, zusammen mit der Adresse dieser Schnittstelle. Die Werkzeugaufrufe erledigt der Anbieter selbst; die Antwort kommt Wort für Wort zurück ins Chatfenster.</p>
+          <h4>Was nötig wäre</h4>
+          <ul class="noetig">
+            <li>API-Konto bei Anthropic; der Schlüssel liegt nur auf dem Server, ein Ausgabenlimit deckelt die Kosten</li>
+            <li>Chat-Endpunkt, der die Messages API mit dem MCP-Connector aufruft und die Antwort als Stream (Server-Sent Events) weiterreicht</li>
+            <li>Vertrag zur Auftragsverarbeitung und Hinweis in der Datenschutzerklärung: Die Fragen gehen an Anthropic in die USA</li>
+          </ul>
+          <dl class="eckdaten">
+            <div><dt>Antworten</dt><dd>hohe Qualität, Quellen und Einordnung werden in der Regel sauber angegeben</dd></div>
+            <div><dt>Kosten</dt><dd>je Frage geschätzt rund 0,1 Cent (Haiku 5.5) bis gut 2 Cent (Sonnet 5.5); 1.000 Fragen etwa 1 bis 25 Euro</dd></div>
+            <div><dt>Last</dt><dd>trägt der Anbieter; die Grenze setzt das Budget</dd></div>
+            <div><dt>Aufwand</dt><dd>gering, etwa ein bis zwei Tage</dd></div>
+            <div><dt>Datenschutz</dt><dd>die Fragen verarbeitet der Anbieter in den USA</dd></div>
+          </dl>
+        </article>
+        <article class="fall">
+          <p class="fall-nr">Fall 3</p>
+          <h3>Chat mit frei verfügbaren Modellen auf lokaler Hardware</h3>
+          <ol class="kette" aria-label="Weg einer Frage">
+            <li><b>Browser</b><span>Chatfenster</span></li>
+            <li><b>Chat-Endpunkt</b><span>PHP auf der Seite</span></li>
+            <li><b>Vermittler + Modell</b><span>eigener Rechner, lokale KI</span></li>
+            <li><b>MCP-Schnittstelle</b><span>wie heute</span></li>
+          </ol>
+          <p>Die Frage geht vom Webserver über eine gesicherte Verbindung zu einem eigenen Rechner mit Grafikkarte. Dort führt ein kleines Programm die Unterhaltung mit dem Modell und reicht dessen Werkzeugaufrufe an die Schnittstelle weiter – der Modellserver selbst ruft keine Werkzeuge auf.</p>
+          <h4>Was nötig wäre</h4>
+          <ul class="noetig">
+            <li>ein Rechner mit leistungsfähiger Grafikkarte (mindestens 24&nbsp;GB Grafikspeicher)</li>
+            <li>Modell mit Werkzeugaufrufen und mindestens 32.000 Token Kontext, etwa Gemma&nbsp;4 26B-A4B oder Qwen3, über llama-server</li>
+            <li>ein Vermittler für die Werkzeugaufrufe und eine gesicherte Verbindung vom Webserver zu diesem Rechner, der dauerhaft laufen muss</li>
+          </ul>
+          <dl class="eckdaten">
+            <div><dt>Antworten</dt><dd>im Testlauf verlinkten alle Antworten einen passenden Artikel; das gründlichere Modell ordnet sorgfältiger ein, braucht aber deutlich länger</dd></div>
+            <div><dt>Kosten</dt><dd>keine Gebühren je Frage; dafür Anschaffung einer Grafikkarte und Strom</dd></div>
+            <div><dt>Last</dt><dd>je nach Modell etwa 1 bis 4 Fragen pro Minute; mit 24 GB läuft eine Unterhaltung zur Zeit, weitere warten kurz</dd></div>
+            <div><dt>Aufwand</dt><dd>mittel, einige Tage, dazu Betrieb und Pflege des eigenen Rechners</dd></div>
+            <div><dt>Datenschutz</dt><dd>die Fragen verlassen den eigenen Betrieb nicht</dd></div>
+          </dl>
+        </article>
+      </div>
+      <div class="probelauf">
+        <h3>Lokale Hardware: Einschätzung nach einem Testlauf</h3>
+        <p class="breit">Eine Grafikkarte mit 24&nbsp;GB Speicher und zwei frei verfügbare Modelle, jeweils mit denselben zwei Briefings und acht Fragen als echter Chat: Das Modell ruft die Werkzeuge der Schnittstelle selbst auf und antwortet mit Links zu den Artikeln. Die Modelle lagen dabei vollständig im Grafikspeicher.</p>
+        <ul class="balken">
+{{PROBELAUF}}
+        </ul>
+        <p class="b-legende"><i class="b-l-beginn"></i>bis die Antwort beginnt <i class="b-l-voll"></i>bis sie fertig ist</p>
+        <p class="breit">Mit dem sparsamen Modell (Gemma&nbsp;4, nur ein Teil der Parameter rechnet je Wort) beantwortet die Karte etwa vier bis fünf Fragen pro Minute, ein Briefing dauert 10 bis 15 Sekunden. Das reicht für Fall&nbsp;1 mit großem Abstand und für einen Chat mit mäßigem Andrang. Das gründlichere Modell (Qwen3.8) nennt öfter Datum und Quelle und schreibt „laut meinungsmache.de“, braucht dafür aber etwa eine Minute je Antwort. Die Artikel sind kurz, deshalb kommen die Antworten deutlich schneller als beim <a href="/afd-gutachten/#ausblick">AfD-Gutachten</a>. Gemessen am 21. November 2026, Details in <a href="{{GITHUB}}/blob/main/docs/ausblick.md#probelauf">docs/ausblick.md</a>.</p>
+      </div>
+      <div class="beide">
+        <h3>Checkliste: was ein Angebot auf der Seite braucht</h3>
+        <ul class="checkliste">
+          <li>{{ikon:haken}}<div><b>Kennzeichnung</b><span>Klar sagen, dass ein Sprachmodell schreibt, welches es ist und dass es sich irren kann; Links führen immer zum Artikel und zur Originalquelle.</span></div></li>
+          <li>{{ikon:haken}}<div><b>Einordnung wie in der Redaktion</b><span>Meldungen mit Quelle, Meinungsbeiträge als Meinung kennzeichnen, keine eigene Wertung des Modells – das gibt die Schnittstelle bereits vor.</span></div></li>
+          <li>{{ikon:haken}}<div><b>Prüfung vor dem Start</b><span>Briefings und Antworten mit festen Testfragen gegenprüfen: passender Artikel, richtige Quelle, nichts erfunden.</span></div></li>
+          <li>{{ikon:haken}}<div><b>Schutz vor Missbrauch</b><span>Beim Chat eine begrenzte Zahl an Anfragen je Anschluss, Bindung an die Nachrichten der Seite und ein Hinweis, wenn gerade zu viel los ist.</span></div></li>
+          <li>{{ikon:haken}}<div><b>Rechtlicher Rahmen</b><span>Impressum und Datenschutzerklärung passend zum gewählten Weg, beim Anbieter zusätzlich ein Vertrag zur Auftragsverarbeitung; die Rechte der Originalmedien bleiben gewahrt, weil nur zusammengefasst und verlinkt wird.</span></div></li>
+          <li>{{ikon:haken}}<div><b>Betreuung im Betrieb</b><span>Jemand behält Kosten, Auslastung und Rückmeldungen im Blick und kann ein Briefing auch einmal zurückhalten.</span></div></li>
+        </ul>
+        <p class="klein">Die Wege lassen sich verbinden: das fertige Briefing als Einstieg, ein Chat für Nachfragen, lokale Hardware als Normalfall und der Anbieter als Ausweichweg bei hoher Last. Ausführlicher, mit Rechenweg der Kostenschätzung: <a href="{{GITHUB}}/blob/main/docs/ausblick.md">docs/ausblick.md</a>.</p>
       </div>
     </section>
 

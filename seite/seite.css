@@ -228,6 +228,73 @@ pre.code { margin: 0; padding: 12px 14px; overflow-x: auto; border: 1px solid va
 @media (max-width: 640px) { .briefings { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .neueste li.frisch { animation: none; } .neueste li { transition: none; } }
 
+/* Ausblick: drei Wege zu einem Angebot direkt auf meinungsmache.de (wie bei „Rede mit dem AfD-Gutachten“) */
+.fall { display: flex; flex-direction: column; padding: clamp(20px, 2.6vw, 32px); border: 1px solid var(--linie); border-radius: 16px; background: var(--flaeche); }
+.fall-nr { margin: 0 0 4px; font-size: .78rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--akzent-text) !important; }
+.fall h3 { margin: 0 0 18px; font-size: clamp(1.15rem, 1.6vw, 1.35rem); }
+.fall h4 { margin: 18px 0 8px; font-size: .95rem; color: var(--text); }
+.kette { list-style: none; margin: 0 0 16px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; }
+.kette li { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border: 1px solid var(--linie); border-radius: var(--radius); background: var(--bg); font-size: .8rem; line-height: 1.3; }
+.kette b { color: var(--text); font-size: .9rem; }
+.kette li:not(:last-child)::after { content: ""; position: absolute; top: 50%; right: -17px; width: 12px; height: 12px; margin-top: -6px;
+  background: var(--akzent); clip-path: polygon(0 15%, 100% 50%, 0 85%); }
+.fall .kette li:nth-child(3) { border-color: color-mix(in oklab, var(--projekt) 55%, var(--linie)); }
+.noetig { margin: 0; padding-left: 1.2em; }
+.noetig li { margin-bottom: 6px; font-size: .92rem; }
+.eckdaten { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--linie); }
+.eckdaten dt { font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text); }
+.eckdaten dd { margin: 2px 0 0; font-size: .88rem; color: var(--text-2); line-height: 1.45; }
+.beide { margin-top: clamp(20px, 2.5vw, 32px); }
+.beide h3 { margin: 0 0 12px; font-size: 1.1rem; }
+.checkliste { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(24px, 4vw, 64px); }
+.checkliste li { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-top: 1px solid var(--linie); }
+.checkliste .ikon { width: 24px; height: 24px; margin-top: 1px; color: var(--akzent); }
+.checkliste div { display: flex; flex-direction: column; gap: 3px; }
+.checkliste b { color: var(--text); font-size: 1rem; }
+.checkliste span { font-size: .92rem; color: var(--text-2); line-height: 1.5; }
+.beide .klein { margin-top: 14px; max-width: 90ch; }
+@media (max-width: 1300px) and (min-width: 961px) { .kette { grid-template-columns: repeat(2, minmax(0, 1fr)); } .kette li:nth-child(2)::after { display: none; } }
+@media (max-width: 640px) {
+  .checkliste { grid-template-columns: 1fr; }
+  .kette { grid-template-columns: 1fr; gap: 14px; }
+  .kette li:not(:last-child)::after { top: auto; bottom: -13px; right: auto; left: 22px; margin: 0; width: 12px; height: 12px; clip-path: polygon(15% 0, 85% 0, 50% 100%); }
+  .eckdaten { grid-template-columns: 1fr; }
+}
+
+/* Probelauf: Balken je Karte und Modell (Werte aus seite/diagramm.py) */
+.probelauf { margin-top: clamp(24px, 3vw, 40px); padding: clamp(20px, 2.6vw, 32px); border: 1px solid var(--linie); border-radius: 16px; background: var(--flaeche); }
+.probelauf h3 { margin: 0 0 8px; font-size: clamp(1.1rem, 1.5vw, 1.3rem); }
+.balken { list-style: none; margin: 18px 0 6px; padding: 0; display: grid; gap: 14px; }
+.balken li { display: grid; grid-template-columns: minmax(200px, 1.1fr) minmax(0, 2.4fr) minmax(220px, 1.1fr); gap: 18px; align-items: center; }
+.b-kopf { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; line-height: 1.3; }
+.b-kopf b { color: var(--text); }
+.b-kopf span { font-size: .82rem; color: var(--text-2); }
+.b-kopf em { flex-basis: 100%; font-style: normal; font-family: var(--mono); font-size: .82rem; color: var(--projekt); }
+.b-spur { position: relative; height: 26px; border: 1px solid var(--linie); border-radius: 7px; background: var(--bg); overflow: hidden; }
+.b-spur span { position: absolute; inset: 0 auto 0 0; width: var(--w); border-radius: 6px; }
+.b-voll { background: color-mix(in oklab, var(--akzent) 45%, transparent); }
+.b-beginn { background: var(--akzent); }
+.b-zahl { display: flex; flex-direction: column; font-size: .9rem; color: var(--text-2); line-height: 1.35; }
+.b-zahl p { margin: 0; }
+.b-zahl b { color: var(--text); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.b-zahl .nw { white-space: nowrap; }
+.b-zahl > span { font-size: .8rem; }
+.b-legende { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 4px 0 14px; font-size: .8rem; color: var(--text-2); }
+.b-legende i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; }
+.b-l-beginn { background: var(--akzent); }
+.b-l-voll { background: color-mix(in oklab, var(--akzent) 45%, transparent); margin-left: 8px; }
+@media (max-width: 960px) {
+  .balken li { grid-template-columns: 1fr; gap: 6px; padding-bottom: 10px; border-bottom: 1px solid var(--linie); }
+  .balken li:last-child { border-bottom: 0; }
+}
+
+
+.fall-breit { margin-bottom: clamp(16px, 2vw, 24px); }
+.fall-breit .noetig { columns: 2; column-gap: clamp(24px, 4vw, 64px); }
+.fall-breit .eckdaten { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 960px) { .fall-breit .noetig { columns: 1; } .fall-breit .eckdaten { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .fall-breit .eckdaten { grid-template-columns: 1fr; } }
+
 /* --akzent-text (Akzentfarbe als Schrift, im hellen Bild dunkler) kommt aus der gemeinsamen style.css */
 
 /* Sehr schmale Smartphones (320 px): Titel kleiner, Spalte darf schrumpfen */
@@ -256,3 +323,6 @@ pre.code { margin: 0; padding: 12px 14px; overflow-x: auto; border: 1px solid va
   .js .menue-knopf { width: 44px; padding: 0; justify-content: center; }
   .js .menue-wort { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
+/* Fall 1: hervorgehoben ist der Schritt mit dem Sprachmodell (der zweite) */
+.fall-breit .kette li:nth-child(3) { border-color: var(--linie); }
+.fall-breit .kette li:nth-child(2) { border-color: color-mix(in oklab, var(--projekt) 55%, var(--linie)); }

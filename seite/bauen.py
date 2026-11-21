@@ -12,7 +12,7 @@ import html, json, re, sys, urllib.request
 from datetime import date
 from pathlib import Path
 
-from diagramm import diagramm_seite
+from diagramm import diagramm_seite, suche_seite, probelauf_html
 from zeichen import BLASE, ZEITUNG
 
 HIER = Path(__file__).parent
@@ -20,7 +20,7 @@ LOGOS = HIER / 'logos'
 SEITE = 'https://poc.deutschkaemer.info/meinungsmache/'
 ADRESSE = SEITE + 'mcp'
 GITHUB = 'https://github.com/rony-x2/rede-mit-meinungsmache'
-V_CSS, V_JS = 3, 1
+V_CSS, V_JS = 4, 1
 BESCHREIBUNG = ('Die Nachrichten von meinungsmache.de mit Claude, ChatGPT, Grok oder einem lokalen Modell befragen: '
                 'MCP-Schnittstelle mit stündlich aktualisierten Artikeln, Morgen- und Abendbriefing, Antworten mit Link '
                 'zum Beitrag und zur Originalquelle.')
@@ -37,6 +37,7 @@ IKONEN = {
     'werkzeug': '<path d="M14.7 6.3a4 4 0 0 0 5 5l-8.9 8.9a2.1 2.1 0 0 1-3-3z"/><path d="M14.7 6.3l2.8-2.8a4 4 0 0 1 3 3l-2.8 2.8"/>',
     'menue': '<path d="M4 7h16M4 12h16M4 17h16"/>',
     'schliessen': '<path d="M6 6l12 12M18 6L6 18"/>',
+    'haken': '<circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/>',
     # Briefing: Sonnenaufgang, Mond, Kalender, Uhr
     'morgen': '<path d="M3 18h18M7.5 18a4.5 4.5 0 0 1 9 0"/><path d="M12 5v3M5.6 9.6l2 2M18.4 9.6l-2 2M3.5 14.5h2M18.5 14.5h2"/>',
     'abend': '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>',
@@ -180,7 +181,7 @@ if __name__ == '__main__':
         'STAND_BEISPIELE': STAND_BEISPIELE,
         'NEUESTE': neueste_html(neu),
         'SCHEMA': schema(st), 'BESCHREIBUNG': h(BESCHREIBUNG), 'ADRESSE': ADRESSE, 'GITHUB': GITHUB,
-        'DIAGRAMM': diagramm_seite(), 'V_CSS': str(V_CSS), 'V_JS': str(V_JS),
+        'DIAGRAMM': diagramm_seite(), 'SUCHE': suche_seite(), 'PROBELAUF': probelauf_html(), 'V_CSS': str(V_CSS), 'V_JS': str(V_JS),
         'Z_ARTIKEL': zahl(st['artikel']), 'Z_MELDUNGEN': zahl(ue['meldungen']), 'Z_EIGENE': zahl(ue['eigene_artikel']),
         'Z_QUELLEN': zahl(len(werkzeug('quellen', {})['quellen'])),
         'Z_ABRUF': h(zeit(st['letzter_abruf'] or st['bis'])), 'Z_BIS': h(zeit(st['bis'])),

@@ -38,6 +38,13 @@ Die Schnittstelle gibt dem Modell Regeln für die Antwort mit: wiedergeben, was 
 4. **Suche:** `bedeutung_suchen` bettet die Frage ein, vergleicht sie mit den erzeugten Fragen und den Textteilen und führt beide Ranglisten zusammen (Reciprocal Rank Fusion). In einem Testsatz mit 34 Alltagsfragen steht der passende Artikel damit bei 31 auf Platz 1 und bei allen unter den ersten fünf, vorher bei 25 und 32 ([docs/anreicherung.md](docs/anreicherung.md#messung)).
 5. **Schnittstelle:** `mcp_server.php` spricht MCP über Streamable HTTP (Protokoll 2025-11-25, 2025-06-18 und 2025-03-26). Ein Konto ist nicht nötig, und es wird nur lesend zugegriffen.
 
+### So findet die Suche die passenden Artikel
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/bilder/suche-dunkel.svg">
+  <img alt="Suche: Die Frage wird lokal eingebettet und mit den vorab erzeugten Fragen und den Textteilen der Artikel verglichen; beide Ranglisten werden zusammengeführt, der Volltext springt nur als Ersatz ein. Ein Briefing nimmt alle Artikel des Zeitraums und gliedert sie nach Themen." src="docs/bilder/suche-hell.svg" width="100%">
+</picture>
+
 ## Verzeichnisse
 
 | Verzeichnis | Inhalt |
@@ -53,6 +60,7 @@ Die Schnittstelle gibt dem Modell Regeln für die Antwort mit: wiedergeben, was 
 
 - [docs/abruf.md](docs/abruf.md): Quellen, Zerlegung der Artikelseiten, Aktualisierung, Einbettung, Grenzen
 - [docs/anreicherung.md](docs/anreicherung.md): Fragen, Suchbegriffe und Themen von einem lokalen Sprachmodell, Arbeiter, Messung
+- [docs/ausblick.md](docs/ausblick.md): fertiges Briefing, Chat über einen Anbieter oder auf eigener Hardware, mit Kosten und Probelauf
 - [docs/werkzeuge.md](docs/werkzeuge.md): Protokoll, Werkzeuge, Briefing, Anweisungen an das Modell, Einbindung in Clients
 - [docs/server.md](docs/server.md): Voraussetzungen, Verzeichnisse, Datenbank, Cron, Einbettungsdienst, Betrieb
 - [docs/projektseite.md](docs/projektseite.md): Aufbau und Gestaltung der Projektseite, Zeichen, Bauen

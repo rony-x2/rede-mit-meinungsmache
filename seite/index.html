@@ -27,7 +27,7 @@
   <meta name="theme-color" content="#0f1115">
   <script>document.documentElement.classList.add('js')</script>
   <link rel="stylesheet" href="/style.css?v=5">
-  <link rel="stylesheet" href="seite.css?v=3">
+  <link rel="stylesheet" href="seite.css?v=4">
   <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -164,6 +164,7 @@
         <a href="#werkzeuge">Werkzeuge</a>
         <a href="#aufbau">Aufbau</a>
         <a href="#quelltext">Quelltext</a>
+        <a href="#ausblick">Ausblick</a>
         <a href="#datenschutz">Datenschutz</a>
         <a href="/">Alle PoCs</a>
       </nav>
@@ -503,6 +504,43 @@
       </div>
     </section>
 
+    <section class="block" id="suche">
+      <h2>So findet die Suche die passenden Artikel</h2>
+      <p class="breit">Eine Frage in eigenen Worten wird von einem kleinen lokalen Modell (Qwen3-Embedding) in einen Vektor umgerechnet und mit zwei Listen verglichen: mit den Fragen, die Gemma&nbsp;4 vorab zu jedem Artikel geschrieben hat, und mit dem Text der Artikel. Beide Ranglisten werden zusammengeführt, die erzeugten Fragen zählen dabei etwas mehr. Die Volltextsuche springt nur ein, wenn die Umrechnung gerade nicht erreichbar ist. Ein Briefing sucht dagegen gar nicht: Es nimmt alle Artikel des Zeitraums und gliedert sie nach ihren Themen.</p>
+      <figure class="diagramm">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1190 482" class="d-quer" role="img" aria-labelledby="dsq-titel dsq-text"><title id="dsq-titel">So findet „Rede mit Meinungsmache“ die passenden Artikel</title><desc id="dsq-text">Eine Frage in eigenen Worten wird lokal eingebettet und mit zwei Listen verglichen: den Fragen, die ein Sprachmodell vorab zu jedem Artikel geschrieben hat, und den Textteilen der Artikel. Beide Ranglisten werden zusammengeführt, die erzeugten Fragen zählen etwas mehr. Die Volltextsuche springt nur ein, wenn die Einbettung ausfällt. Ein Briefing sucht nicht: Es nimmt alle Artikel eines Zeitraums und gliedert sie nach ihren Themen.</desc><style>
+.d-bahn{fill:color-mix(in oklab,var(--flaeche) 40%,transparent);stroke:var(--linie);stroke-dasharray:4 4}
+.d-bahntitel{fill:var(--text-2);font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}
+.d-kasten{fill:var(--flaeche);stroke:var(--linie);stroke-width:1.2}
+.d-t{fill:var(--text);font-size:15px;font-weight:600}
+.d-d{fill:var(--text-2);font-size:12.5px}
+.d-f{fill:var(--projekt);font-size:11.5px;font-family:var(--mono)}
+.d-p{fill:none;stroke:var(--text-2);stroke-width:1.4;stroke-linejoin:round}
+.d-p.b{stroke:var(--akzent);stroke-width:1.6}
+.d-s{fill:var(--text-2)}.d-s.b{fill:var(--akzent)}
+.d-l{fill:var(--text-2);font-size:11.5px}.d-l.b{fill:var(--akzent-text, var(--akzent))}
+.d-chip{fill:var(--flaeche);stroke:var(--akzent);stroke-width:1.1}
+.d-chiptext{fill:var(--akzent-text, var(--akzent));font-size:10.5px;font-weight:600;letter-spacing:.02em}
+.d-hinweis{fill:var(--akzent-text, var(--akzent));font-size:11.5px;font-weight:600}
+</style><defs><marker id="dsq-s" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="d-s" d="M0,0.6 L7.6,4 L0,7.4 z"/></marker><marker id="dsq-sb" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="d-s b" d="M0,0.6 L7.6,4 L0,7.4 z"/></marker></defs><rect class="d-bahn" x="4" y="4" width="1182" height="330" rx="14"/><text class="d-bahntitel" x="20" y="26">Frage in eigenen Worten · Werkzeug bedeutung_suchen</text><rect class="d-kasten" x="20" y="120" width="150" height="70" rx="10"/><text class="d-t" x="95" y="151" text-anchor="middle">Frage</text><text class="d-d" x="95" y="169" text-anchor="middle">in eigenen Worten</text><rect class="d-kasten" x="196" y="120" width="220" height="70" rx="10"/><text class="d-t" x="306" y="151" text-anchor="middle">Frage einbetten</text><text class="d-d" x="306" y="169" text-anchor="middle">Qwen3, mit Suchanweisung</text><rect class="d-kasten" x="450" y="44" width="260" height="70" rx="10"/><text class="d-t" x="580" y="68" text-anchor="middle">Erzeugte Fragen</text><text class="d-d" x="580" y="86" text-anchor="middle">von Gemma 4, je Artikel 3 bis 5</text><text class="d-f" x="580" y="104" text-anchor="middle">mm_frage</text><rect class="d-kasten" x="450" y="144" width="260" height="70" rx="10"/><text class="d-t" x="580" y="168" text-anchor="middle">Artikeltext</text><text class="d-d" x="580" y="186" text-anchor="middle">Textteile, je Artikel der beste</text><text class="d-f" x="580" y="204" text-anchor="middle">mm_vektor</text><rect class="d-kasten" x="450" y="244" width="260" height="70" rx="10"/><text class="d-t" x="580" y="268" text-anchor="middle">Volltext</text><text class="d-d" x="580" y="286" text-anchor="middle">nur wenn die Einbettung ausfällt</text><text class="d-f" x="580" y="304" text-anchor="middle">mm_artikel</text><rect class="d-chip" x="626.2" y="35" width="71.8" height="18" rx="9"/><text class="d-chiptext" x="662.1" y="48" text-anchor="middle">lokale KI</text><rect class="d-chip" x="332.2" y="111" width="71.8" height="18" rx="9"/><text class="d-chiptext" x="368.1" y="124" text-anchor="middle">lokale KI</text><rect class="d-kasten" x="746" y="120" width="190" height="70" rx="10"/><text class="d-t" x="841" y="151" text-anchor="middle">Rank Fusion</text><text class="d-d" x="841" y="169" text-anchor="middle">Gewichte 1,0 · 0,75</text><rect class="d-kasten" x="970" y="120" width="200" height="70" rx="10"/><text class="d-t" x="1070" y="151" text-anchor="middle">Artikel</text><text class="d-d" x="1070" y="169" text-anchor="middle">Links, Quelle und Themen</text><polyline class="d-p" points="170,155 194,155" marker-end="url(#dsq-s)"/><polyline class="d-p" points="416,155 432,155 432,79 448,79" marker-end="url(#dsq-s)"/><polyline class="d-p" points="432,155 432,179 448,179" marker-end="url(#dsq-s)"/><polyline class="d-p" points="95,190 95,279 448,279" marker-end="url(#dsq-s)"/><text class="d-l" x="185" y="272" text-anchor="start">Wörter der Frage, nur als Ersatz</text><polyline class="d-p b" points="710,79 728,79 728,155 744,155" marker-end="url(#dsq-sb)"/><polyline class="d-p b" points="710,179 728,179 728,155"/><polyline class="d-p b" points="710,279 728,279 728,179"/><polyline class="d-p b" points="936,155 968,155" marker-end="url(#dsq-sb)"/><rect class="d-bahn" x="4" y="350" width="1182" height="128" rx="14"/><text class="d-bahntitel" x="20" y="372">Briefing · Werkzeug briefing</text><rect class="d-kasten" x="20" y="390" width="190" height="70" rx="10"/><text class="d-t" x="115" y="421" text-anchor="middle">Briefing-Wunsch</text><text class="d-d" x="115" y="439" text-anchor="middle">„Was war heute los?“</text><rect class="d-kasten" x="236" y="390" width="220" height="70" rx="10"/><text class="d-t" x="346" y="421" text-anchor="middle">Zeitraum</text><text class="d-d" x="346" y="439" text-anchor="middle">morgen · abend · tag · woche</text><rect class="d-kasten" x="482" y="390" width="228" height="70" rx="10"/><text class="d-t" x="596" y="414" text-anchor="middle">Alle Artikel</text><text class="d-d" x="596" y="432" text-anchor="middle">des Zeitraums, neueste zuerst</text><text class="d-f" x="596" y="450" text-anchor="middle">mm_artikel</text><rect class="d-kasten" x="736" y="390" width="200" height="70" rx="10"/><text class="d-t" x="836" y="414" text-anchor="middle">Nach Themen</text><text class="d-d" x="836" y="432" text-anchor="middle">aus der Anreicherung</text><text class="d-f" x="836" y="450" text-anchor="middle">mm_thema</text><rect class="d-kasten" x="962" y="390" width="208" height="70" rx="10"/><text class="d-t" x="1066" y="421" text-anchor="middle">Briefing</text><text class="d-d" x="1066" y="439" text-anchor="middle">Assistent fasst zusammen</text><rect class="d-chip" x="852.2" y="381" width="71.8" height="18" rx="9"/><text class="d-chiptext" x="888.1" y="394" text-anchor="middle">lokale KI</text><polyline class="d-p" points="210,425 234,425" marker-end="url(#dsq-s)"/><polyline class="d-p" points="456,425 480,425" marker-end="url(#dsq-s)"/><polyline class="d-p" points="710,425 734,425" marker-end="url(#dsq-s)"/><polyline class="d-p b" points="936,425 960,425" marker-end="url(#dsq-sb)"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 1004" class="d-hoch" role="img" aria-labelledby="dsh-titel dsh-text"><title id="dsh-titel">So findet „Rede mit Meinungsmache“ die passenden Artikel</title><desc id="dsh-text">Eine Frage in eigenen Worten wird lokal eingebettet und mit zwei Listen verglichen: den Fragen, die ein Sprachmodell vorab zu jedem Artikel geschrieben hat, und den Textteilen der Artikel. Beide Ranglisten werden zusammengeführt, die erzeugten Fragen zählen etwas mehr. Die Volltextsuche springt nur ein, wenn die Einbettung ausfällt. Ein Briefing sucht nicht: Es nimmt alle Artikel eines Zeitraums und gliedert sie nach ihren Themen.</desc><style>
+.d-bahn{fill:color-mix(in oklab,var(--flaeche) 40%,transparent);stroke:var(--linie);stroke-dasharray:4 4}
+.d-bahntitel{fill:var(--text-2);font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}
+.d-kasten{fill:var(--flaeche);stroke:var(--linie);stroke-width:1.2}
+.d-t{fill:var(--text);font-size:15px;font-weight:600}
+.d-d{fill:var(--text-2);font-size:12.5px}
+.d-f{fill:var(--projekt);font-size:11.5px;font-family:var(--mono)}
+.d-p{fill:none;stroke:var(--text-2);stroke-width:1.4;stroke-linejoin:round}
+.d-p.b{stroke:var(--akzent);stroke-width:1.6}
+.d-s{fill:var(--text-2)}.d-s.b{fill:var(--akzent)}
+.d-l{fill:var(--text-2);font-size:11.5px}.d-l.b{fill:var(--akzent-text, var(--akzent))}
+.d-chip{fill:var(--flaeche);stroke:var(--akzent);stroke-width:1.1}
+.d-chiptext{fill:var(--akzent-text, var(--akzent));font-size:10.5px;font-weight:600;letter-spacing:.02em}
+.d-hinweis{fill:var(--akzent-text, var(--akzent));font-size:11.5px;font-weight:600}
+.d-t{font-size:15.5px}.d-d{font-size:13px}.d-f{font-size:12px}.d-l{font-size:12.5px}</style><defs><marker id="dsh-s" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="d-s" d="M0,0.6 L7.6,4 L0,7.4 z"/></marker><marker id="dsh-sb" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="d-s b" d="M0,0.6 L7.6,4 L0,7.4 z"/></marker></defs><rect class="d-bahn" x="4" y="4" width="452" height="600" rx="14"/><text class="d-bahntitel" x="20" y="26">Frage in eigenen Worten</text><rect class="d-kasten" x="130" y="40" width="200" height="70" rx="10"/><text class="d-t" x="230" y="71" text-anchor="middle">Frage</text><text class="d-d" x="230" y="89" text-anchor="middle">in eigenen Worten</text><rect class="d-kasten" x="120" y="134" width="220" height="70" rx="10"/><text class="d-t" x="230" y="165" text-anchor="middle">Frage einbetten</text><text class="d-d" x="230" y="183" text-anchor="middle">Qwen3, mit Suchanweisung</text><rect class="d-chip" x="256.2" y="125" width="71.8" height="18" rx="9"/><text class="d-chiptext" x="292.1" y="138" text-anchor="middle">lokale KI</text><rect class="d-kasten" x="30" y="236" width="260" height="70" rx="10"/><text class="d-t" x="160" y="260" text-anchor="middle">Erzeugte Fragen</text><text class="d-d" x="160" y="278" text-anchor="middle">von Gemma 4, je Artikel 3 bis 5</text><text class="d-f" x="160" y="296" text-anchor="middle">mm_frage</text><rect class="d-chip" x="206.2" y="227" width="71.8" height="18" rx="9"/><text class="d-chiptext" x="242.1" y="240" text-anchor="middle">lokale KI</text><rect class="d-kasten" x="30" y="324" width="260" height="70" rx="10"/><text class="d-t" x="160" y="348" text-anchor="middle">Artikeltext</text><text class="d-d" x="160" y="366" text-anchor="middle">Textteile, je Artikel der beste</text><text class="d-f" x="160" y="384" text-anchor="middle">mm_vektor</text><rect class="d-kasten" x="30" y="412" width="260" height="70" rx="10"/><text class="d-t" x="160" y="436" text-anchor="middle">Volltext</text><text class="d-d" x="160" y="454" text-anchor="middle">nur wenn die Einbettung ausfällt</text><text class="d-f" x="160" y="472" text-anchor="middle">mm_artikel</text><rect class="d-kasten" x="20" y="512" width="190" height="70" rx="10"/><text class="d-t" x="115" y="543" text-anchor="middle">Rank Fusion</text><text class="d-d" x="115" y="561" text-anchor="middle">Gewichte 1,0 · 0,75</text><rect class="d-kasten" x="250" y="512" width="190" height="70" rx="10"/><text class="d-t" x="345" y="543" text-anchor="middle">Artikel</text><text class="d-d" x="345" y="561" text-anchor="middle">Links, Quelle, Themen</text><polyline class="d-p" points="230,110 230,132" marker-end="url(#dsh-s)"/><polyline class="d-p" points="230,204 230,220 310,220 310,271 292,271" marker-end="url(#dsh-s)"/><polyline class="d-p" points="310,271 310,359 292,359" marker-end="url(#dsh-s)"/><polyline class="d-p" points="330,75 430,75 430,447 292,447" marker-end="url(#dsh-s)"/><text class="d-l" x="424" y="300" text-anchor="end">nur als Ersatz</text><polyline class="d-p b" points="30,271 14,271 14,547 18,547" marker-end="url(#dsh-sb)"/><polyline class="d-p b" points="30,359 14,359"/><polyline class="d-p b" points="30,447 14,447"/><polyline class="d-p b" points="210,547 248,547" marker-end="url(#dsh-sb)"/><rect class="d-bahn" x="4" y="620" width="452" height="380" rx="14"/><text class="d-bahntitel" x="20" y="642">Briefing</text><rect class="d-kasten" x="130" y="656" width="200" height="70" rx="10"/><text class="d-t" x="230" y="687" text-anchor="middle">Briefing-Wunsch</text><text class="d-d" x="230" y="705" text-anchor="middle">„Was war heute los?“</text><rect class="d-kasten" x="120" y="744" width="220" height="70" rx="10"/><text class="d-t" x="230" y="775" text-anchor="middle">Zeitraum</text><text class="d-d" x="230" y="793" text-anchor="middle">morgen · abend · tag · woche</text><rect class="d-kasten" x="20" y="836" width="200" height="70" rx="10"/><text class="d-t" x="120" y="860" text-anchor="middle">Alle Artikel</text><text class="d-d" x="120" y="878" text-anchor="middle">des Zeitraums</text><text class="d-f" x="120" y="896" text-anchor="middle">mm_artikel</text><rect class="d-kasten" x="240" y="836" width="200" height="70" rx="10"/><text class="d-t" x="340" y="860" text-anchor="middle">Nach Themen</text><text class="d-d" x="340" y="878" text-anchor="middle">aus der Anreicherung</text><text class="d-f" x="340" y="896" text-anchor="middle">mm_thema</text><rect class="d-chip" x="356.2" y="827" width="71.8" height="18" rx="9"/><text class="d-chiptext" x="392.1" y="840" text-anchor="middle">lokale KI</text><rect class="d-kasten" x="120" y="924" width="220" height="70" rx="10"/><text class="d-t" x="230" y="955" text-anchor="middle">Briefing</text><text class="d-d" x="230" y="973" text-anchor="middle">Assistent fasst zusammen</text><polyline class="d-p" points="230,726 230,742" marker-end="url(#dsh-s)"/><polyline class="d-p" points="230,814 230,826 120,826 120,834" marker-end="url(#dsh-s)"/><polyline class="d-p" points="220,871 238,871" marker-end="url(#dsh-s)"/><polyline class="d-p b" points="340,906 340,916 230,916 230,922" marker-end="url(#dsh-sb)"/></svg>
+      </figure>
+      <p class="breit klein">Gemessen mit 34 Testfragen in Alltagssprache: Der passende Artikel steht bei 31 Fragen auf Platz 1 und bei allen unter den ersten fünf (vorher, nur mit Artikeltext und Volltext: 25 und 32). Am meisten helfen die erzeugten Fragen, wenn jemand andere Wörter benutzt als der Artikel – „Wie sind die Zwischenwahlen in Amerika ausgegangen?“ stieg von Platz 14 auf Platz 1. Verfahren und Messung: <a href="https://github.com/rony-x2/rede-mit-meinungsmache/blob/main/docs/anreicherung.md">docs/anreicherung.md</a>.</p>
+    </section>
+
     <section class="block" id="quelltext">
       <div class="quelltext">
         <div class="qt-kopf">
@@ -520,6 +558,107 @@
           <li><b>Schnittstelle</b><span>MCP-Server in PHP mit allen Werkzeugen und dem Briefing</span><code>server/lib/mcp_server.php</code></li>
           <li><b>Diese Seite</b><span>Vorlage, Bauskript, Gestaltung und das Diagramm als SVG</span><code>seite/</code></li>
         </ul>
+      </div>
+    </section>
+
+    <section class="block" id="ausblick">
+      <h2>Ausblick: direkt auf meinungsmache.de</h2>
+      <p class="breit">Bisher braucht man einen eigenen KI-Assistenten, um mit den Nachrichten zu sprechen. meinungsmache.de könnte das auch selbst anbieten, ohne Konto und ohne Einrichtung. Die Schnittstelle bliebe dafür unverändert; dazu käme ein Sprachmodell, das sie benutzt. Drei Wege wären denkbar – umgesetzt ist keiner davon.</p>
+      <article class="fall fall-breit">
+        <p class="fall-nr">Fall 1</p>
+        <h3>Fertiges Briefing, morgens und abends</h3>
+        <ol class="kette" aria-label="Weg eines Briefings">
+          <li><b>Zeitplan</b><span>etwa 7 und 18 Uhr</span></li>
+          <li><b>Briefing schreiben</b><span>Sprachmodell mit dem Werkzeug briefing</span></li>
+          <li><b>Redaktion schaut drüber</b><span>auf Wunsch, vor dem Veröffentlichen</span></li>
+          <li><b>Seite, RSS, Newsletter</b><span>für alle dasselbe Briefing</span></li>
+        </ol>
+        <p>Statt jede Frage einzeln zu beantworten, schreibt ein Sprachmodell zweimal am Tag ein Briefing aus den neuen Artikeln, gegliedert nach Themen und mit Links zu jedem Beitrag. Es erscheint als eigene Seite, im RSS-Feed oder als Newsletter. Fragen stellen kann man dort nicht, dafür kostet es fast nichts und lässt sich vor dem Erscheinen prüfen.</p>
+        <h4>Was nötig wäre</h4>
+        <ul class="noetig">
+          <li>ein geplanter Lauf, der das Briefing zur festen Zeit erzeugt</li>
+          <li>ein Sprachmodell: auf eigener Hardware (im Testlauf rund 10 bis 15 Sekunden je Briefing) oder bei einem Anbieter</li>
+          <li>ein Platz für die Ausgabe: Seite, RSS-Feed oder Newsletter-Versand</li>
+          <li>auf Wunsch eine Freigabe durch die Redaktion vor dem Veröffentlichen</li>
+        </ul>
+        <dl class="eckdaten">
+          <div><dt>Antworten</dt><dd>einheitlich für alle, vorab prüfbar</dd></div>
+          <div><dt>Kosten</dt><dd>zwei Modellaufrufe am Tag: lokal nur Strom, beim Anbieter je nach Modell wenige Cent bis etwa 1,50 Euro im Monat</dd></div>
+          <div><dt>Last</dt><dd>keine, das Briefing ist eine fertige Seite</dd></div>
+          <div><dt>Datenschutz</dt><dd>es werden keine Fragen von Leserinnen und Lesern verarbeitet</dd></div>
+        </dl>
+      </article>
+      <div class="raster zwei faelle">
+        <article class="fall">
+          <p class="fall-nr">Fall 2</p>
+          <h3>Chat über einen KI-Anbieter, etwa Claude</h3>
+          <ol class="kette" aria-label="Weg einer Frage">
+            <li><b>Browser</b><span>Chatfenster</span></li>
+            <li><b>Chat-Endpunkt</b><span>PHP auf der Seite</span></li>
+            <li><b>Claude API</b><span>Modell bei Anthropic</span></li>
+            <li><b>MCP-Schnittstelle</b><span>wie heute</span></li>
+          </ol>
+          <p>Ein kleiner Endpunkt auf dem Webserver nimmt die Frage entgegen und schickt sie an die Claude API, zusammen mit der Adresse dieser Schnittstelle. Die Werkzeugaufrufe erledigt der Anbieter selbst; die Antwort kommt Wort für Wort zurück ins Chatfenster.</p>
+          <h4>Was nötig wäre</h4>
+          <ul class="noetig">
+            <li>API-Konto bei Anthropic; der Schlüssel liegt nur auf dem Server, ein Ausgabenlimit deckelt die Kosten</li>
+            <li>Chat-Endpunkt, der die Messages API mit dem MCP-Connector aufruft und die Antwort als Stream (Server-Sent Events) weiterreicht</li>
+            <li>Vertrag zur Auftragsverarbeitung und Hinweis in der Datenschutzerklärung: Die Fragen gehen an Anthropic in die USA</li>
+          </ul>
+          <dl class="eckdaten">
+            <div><dt>Antworten</dt><dd>hohe Qualität, Quellen und Einordnung werden in der Regel sauber angegeben</dd></div>
+            <div><dt>Kosten</dt><dd>je Frage geschätzt rund 0,1 Cent (Haiku 5.5) bis gut 2 Cent (Sonnet 5.5); 1.000 Fragen etwa 1 bis 25 Euro</dd></div>
+            <div><dt>Last</dt><dd>trägt der Anbieter; die Grenze setzt das Budget</dd></div>
+            <div><dt>Aufwand</dt><dd>gering, etwa ein bis zwei Tage</dd></div>
+            <div><dt>Datenschutz</dt><dd>die Fragen verarbeitet der Anbieter in den USA</dd></div>
+          </dl>
+        </article>
+        <article class="fall">
+          <p class="fall-nr">Fall 3</p>
+          <h3>Chat mit frei verfügbaren Modellen auf lokaler Hardware</h3>
+          <ol class="kette" aria-label="Weg einer Frage">
+            <li><b>Browser</b><span>Chatfenster</span></li>
+            <li><b>Chat-Endpunkt</b><span>PHP auf der Seite</span></li>
+            <li><b>Vermittler + Modell</b><span>eigener Rechner, lokale KI</span></li>
+            <li><b>MCP-Schnittstelle</b><span>wie heute</span></li>
+          </ol>
+          <p>Die Frage geht vom Webserver über eine gesicherte Verbindung zu einem eigenen Rechner mit Grafikkarte. Dort führt ein kleines Programm die Unterhaltung mit dem Modell und reicht dessen Werkzeugaufrufe an die Schnittstelle weiter – der Modellserver selbst ruft keine Werkzeuge auf.</p>
+          <h4>Was nötig wäre</h4>
+          <ul class="noetig">
+            <li>ein Rechner mit leistungsfähiger Grafikkarte (mindestens 24&nbsp;GB Grafikspeicher)</li>
+            <li>Modell mit Werkzeugaufrufen und mindestens 32.000 Token Kontext, etwa Gemma&nbsp;4 26B-A4B oder Qwen3, über llama-server</li>
+            <li>ein Vermittler für die Werkzeugaufrufe und eine gesicherte Verbindung vom Webserver zu diesem Rechner, der dauerhaft laufen muss</li>
+          </ul>
+          <dl class="eckdaten">
+            <div><dt>Antworten</dt><dd>im Testlauf verlinkten alle Antworten einen passenden Artikel; das gründlichere Modell ordnet sorgfältiger ein, braucht aber deutlich länger</dd></div>
+            <div><dt>Kosten</dt><dd>keine Gebühren je Frage; dafür Anschaffung einer Grafikkarte und Strom</dd></div>
+            <div><dt>Last</dt><dd>je nach Modell etwa 1 bis 4 Fragen pro Minute; mit 24 GB läuft eine Unterhaltung zur Zeit, weitere warten kurz</dd></div>
+            <div><dt>Aufwand</dt><dd>mittel, einige Tage, dazu Betrieb und Pflege des eigenen Rechners</dd></div>
+            <div><dt>Datenschutz</dt><dd>die Fragen verlassen den eigenen Betrieb nicht</dd></div>
+          </dl>
+        </article>
+      </div>
+      <div class="probelauf">
+        <h3>Lokale Hardware: Einschätzung nach einem Testlauf</h3>
+        <p class="breit">Eine Grafikkarte mit 24&nbsp;GB Speicher und zwei frei verfügbare Modelle, jeweils mit denselben zwei Briefings und acht Fragen als echter Chat: Das Modell ruft die Werkzeuge der Schnittstelle selbst auf und antwortet mit Links zu den Artikeln. Die Modelle lagen dabei vollständig im Grafikspeicher.</p>
+        <ul class="balken">
+          <li><div class="b-kopf"><b>Tesla P40</b> <span>24 GB Grafikspeicher</span><em>Gemma 4 26B-A4B</em></div><div class="b-spur" role="img" aria-label="13,5 Sekunden je Antwort, Antwort beginnt nach 6 Sekunden"><span class="b-voll" style="--w:19.3%"></span><span class="b-beginn" style="--w:8.6%"></span></div><div class="b-zahl"><p><b>13,5 s</b> je Antwort</p><span>≈ 4,5 Fragen pro Minute</span><span>passender Artikel 10/10 · <span class="nw">Briefing 10–14 s</span></span></div></li>
+          <li><div class="b-kopf"><b>Tesla P40</b> <span>24 GB Grafikspeicher</span><em>Qwen3.8-27B</em></div><div class="b-spur" role="img" aria-label="64 Sekunden je Antwort, Antwort beginnt nach 25,5 Sekunden"><span class="b-voll" style="--w:91.4%"></span><span class="b-beginn" style="--w:36.4%"></span></div><div class="b-zahl"><p><b>64 s</b> je Antwort</p><span>≈ 1 Frage pro Minute</span><span>passender Artikel 10/10 · <span class="nw">Briefing 44–59 s</span></span></div></li>
+        </ul>
+        <p class="b-legende"><i class="b-l-beginn"></i>bis die Antwort beginnt <i class="b-l-voll"></i>bis sie fertig ist</p>
+        <p class="breit">Mit dem sparsamen Modell (Gemma&nbsp;4, nur ein Teil der Parameter rechnet je Wort) beantwortet die Karte etwa vier bis fünf Fragen pro Minute, ein Briefing dauert 10 bis 15 Sekunden. Das reicht für Fall&nbsp;1 mit großem Abstand und für einen Chat mit mäßigem Andrang. Das gründlichere Modell (Qwen3.8) nennt öfter Datum und Quelle und schreibt „laut meinungsmache.de“, braucht dafür aber etwa eine Minute je Antwort. Die Artikel sind kurz, deshalb kommen die Antworten deutlich schneller als beim <a href="/afd-gutachten/#ausblick">AfD-Gutachten</a>. Gemessen am 21. November 2026, Details in <a href="https://github.com/rony-x2/rede-mit-meinungsmache/blob/main/docs/ausblick.md#probelauf">docs/ausblick.md</a>.</p>
+      </div>
+      <div class="beide">
+        <h3>Checkliste: was ein Angebot auf der Seite braucht</h3>
+        <ul class="checkliste">
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/></svg><div><b>Kennzeichnung</b><span>Klar sagen, dass ein Sprachmodell schreibt, welches es ist und dass es sich irren kann; Links führen immer zum Artikel und zur Originalquelle.</span></div></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/></svg><div><b>Einordnung wie in der Redaktion</b><span>Meldungen mit Quelle, Meinungsbeiträge als Meinung kennzeichnen, keine eigene Wertung des Modells – das gibt die Schnittstelle bereits vor.</span></div></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/></svg><div><b>Prüfung vor dem Start</b><span>Briefings und Antworten mit festen Testfragen gegenprüfen: passender Artikel, richtige Quelle, nichts erfunden.</span></div></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/></svg><div><b>Schutz vor Missbrauch</b><span>Beim Chat eine begrenzte Zahl an Anfragen je Anschluss, Bindung an die Nachrichten der Seite und ein Hinweis, wenn gerade zu viel los ist.</span></div></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/></svg><div><b>Rechtlicher Rahmen</b><span>Impressum und Datenschutzerklärung passend zum gewählten Weg, beim Anbieter zusätzlich ein Vertrag zur Auftragsverarbeitung; die Rechte der Originalmedien bleiben gewahrt, weil nur zusammengefasst und verlinkt wird.</span></div></li>
+          <li><svg class="ikon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16.2 9.6"/></svg><div><b>Betreuung im Betrieb</b><span>Jemand behält Kosten, Auslastung und Rückmeldungen im Blick und kann ein Briefing auch einmal zurückhalten.</span></div></li>
+        </ul>
+        <p class="klein">Die Wege lassen sich verbinden: das fertige Briefing als Einstieg, ein Chat für Nachfragen, lokale Hardware als Normalfall und der Anbieter als Ausweichweg bei hoher Last. Ausführlicher, mit Rechenweg der Kostenschätzung: <a href="https://github.com/rony-x2/rede-mit-meinungsmache/blob/main/docs/ausblick.md">docs/ausblick.md</a>.</p>
       </div>
     </section>
 

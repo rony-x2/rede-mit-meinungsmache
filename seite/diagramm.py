@@ -117,7 +117,7 @@ class Zeichnung:
         k = 'd-l b' if betrieb else 'd-l'
         self.teile.append(f'<text class="{k}" x="{x}" y="{y}" text-anchor="{anker}">{escape(txt)}</text>')
 
-    def svg(self, w, h, thema, klasse='', gross=False):
+    def svg(self, w, h, thema, klasse='', gross=False, titel=None, text=None):
         stil = STIL_KLASSEN % THEMEN[thema]
         if gross:   # Hochformat fürs Smartphone: etwas größere Schrift, damit sie verkleinert lesbar bleibt
             stil += '.d-t{font-size:15.5px}.d-d{font-size:13px}.d-f{font-size:12px}.d-l{font-size:12.5px}'
@@ -130,7 +130,7 @@ class Zeichnung:
         k = f' class="{klasse}"' if klasse else ''
         return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}"{k} role="img" '
                 f'aria-labelledby="{self.p}-titel {self.p}-text">'
-                f'<title id="{self.p}-titel">{escape(TITEL)}</title><desc id="{self.p}-text">{escape(BESCHREIBUNG)}</desc>'
+                f'<title id="{self.p}-titel">{escape(titel or TITEL)}</title><desc id="{self.p}-text">{escape(text or BESCHREIBUNG)}</desc>'
                 f'<style>{stil}</style><defs>{marker}</defs>' + ''.join(self.teile) + '</svg>')
 
 
@@ -203,6 +203,158 @@ def hoch(thema, praefix='dh'):
     return z.svg(460, 812, thema, 'd-hoch', gross=True)
 
 
+# ------------------------------------------------------------------ So findet die Suche (docs/anreicherung.md)
+S_TITEL = 'So findet „Rede mit Meinungsmache“ die passenden Artikel'
+S_TEXT = ('Eine Frage in eigenen Worten wird lokal eingebettet und mit zwei Listen verglichen: den Fragen, die ein '
+          'Sprachmodell vorab zu jedem Artikel geschrieben hat, und den Textteilen der Artikel. Beide Ranglisten werden '
+          'zusammengeführt, die erzeugten Fragen zählen etwas mehr. Die Volltextsuche springt nur ein, wenn die Einbettung '
+          'ausfällt. Ein Briefing sucht nicht: Es nimmt alle Artikel eines Zeitraums und gliedert sie nach ihren Themen.')
+S = {
+    'frage':   ('Frage', 'in eigenen Worten', None),
+    'einbett': ('Frage einbetten', 'Qwen3, mit Suchanweisung', None),
+    'fragen':  ('Erzeugte Fragen', 'von Gemma 4, je Artikel 3 bis 5', 'mm_frage'),
+    'text':    ('Artikeltext', 'Textteile, je Artikel der beste', 'mm_vektor'),
+    'voll':    ('Volltext', 'nur wenn die Einbettung ausfällt', 'mm_artikel'),
+    'fusion':  ('Rank Fusion', 'Gewichte 1,0 · 0,75', None),
+    'treffer': ('Artikel', 'Links, Quelle und Themen', None),
+    'wunsch':  ('Briefing-Wunsch', '„Was war heute los?“', None),
+    'zeit':    ('Zeitraum', 'morgen · abend · tag · woche', None),
+    'alle':    ('Alle Artikel', 'des Zeitraums, neueste zuerst', 'mm_artikel'),
+    'themen':  ('Nach Themen', 'aus der Anreicherung', 'mm_thema'),
+    'brief':   ('Briefing', 'Assistent fasst zusammen', None),
+}
+
+
+def suche(thema, praefix='ds'):
+    """Zwei Wege zu den Artikeln: Suche nach Bedeutung und Briefing (Projektseite, docs)."""
+    z = Zeichnung(praefix)
+    z.bahn(4, 4, 1182, 330, 'Frage in eigenen Worten · Werkzeug bedeutung_suchen')
+    z.kasten(S['frage'], 20, 120, 150)
+    z.kasten(S['einbett'], 196, 120, 220)
+    z.kasten(S['fragen'], 450, 44, 260)
+    z.kasten(S['text'], 450, 144, 260)
+    z.kasten(S['voll'], 450, 244, 260)
+    z.chip(450, 44, 260)
+    z.chip(196, 120, 220)
+    z.kasten(S['fusion'], 746, 120, 190)
+    z.kasten(S['treffer'], 970, 120, 200)
+    z.pfeil([(170, 155), (194, 155)])
+    z.pfeil([(416, 155), (432, 155), (432, 79), (448, 79)])
+    z.pfeil([(432, 155), (432, 179), (448, 179)])
+    z.pfeil([(95, 190), (95, 279), (448, 279)])
+    z.text(185, 272, 'Wörter der Frage, nur als Ersatz', anker='start')
+    z.pfeil([(710, 79), (728, 79), (728, 155), (744, 155)], betrieb=True)
+    z.pfeil([(710, 179), (728, 179), (728, 155)], betrieb=True, spitze=False)
+    z.pfeil([(710, 279), (728, 279), (728, 179)], betrieb=True, spitze=False)
+    z.pfeil([(936, 155), (968, 155)], betrieb=True)
+    z.bahn(4, 350, 1182, 128, 'Briefing · Werkzeug briefing')
+    z.kasten(S['wunsch'], 20, 390, 190)
+    z.kasten(S['zeit'], 236, 390, 220)
+    z.kasten(S['alle'], 482, 390, 228)
+    z.kasten(S['themen'], 736, 390, 200)
+    z.kasten(S['brief'], 962, 390, 208)
+    z.chip(736, 390, 200)
+    for x in (210, 456, 710):
+        z.pfeil([(x, 425), (x + 24, 425)])
+    z.pfeil([(936, 425), (960, 425)], betrieb=True)
+    return z.svg(1190, 482, thema, 'd-quer', titel=S_TITEL, text=S_TEXT)
+
+
+def suche_hoch(thema, praefix='dsh'):
+    """Hochkant-Fassung fürs Smartphone."""
+    z = Zeichnung(praefix)
+    z.bahn(4, 4, 452, 600, 'Frage in eigenen Worten')
+    z.kasten(S['frage'], 130, 40, 200)
+    z.kasten(S['einbett'], 120, 134, 220)
+    z.chip(120, 134, 220)
+    z.kasten(S['fragen'], 30, 236, 260)
+    z.chip(30, 236, 260)
+    z.kasten(S['text'], 30, 324, 260)
+    z.kasten(S['voll'], 30, 412, 260)
+    z.kasten(S['fusion'], 20, 512, 190)
+    z.kasten(('Artikel', 'Links, Quelle, Themen', None), 250, 512, 190)
+    z.pfeil([(230, 110), (230, 132)])
+    z.pfeil([(230, 204), (230, 220), (310, 220), (310, 271), (292, 271)])
+    z.pfeil([(310, 271), (310, 359), (292, 359)])
+    z.pfeil([(330, 75), (430, 75), (430, 447), (292, 447)])
+    z.text(424, 300, 'nur als Ersatz', anker='end')
+    z.pfeil([(30, 271), (14, 271), (14, 547), (18, 547)], betrieb=True)
+    z.pfeil([(30, 359), (14, 359)], betrieb=True, spitze=False)
+    z.pfeil([(30, 447), (14, 447)], betrieb=True, spitze=False)
+    z.pfeil([(210, 547), (248, 547)], betrieb=True)
+    z.bahn(4, 620, 452, 380, 'Briefing')
+    z.kasten(S['wunsch'], 130, 656, 200)
+    z.kasten(S['zeit'], 120, 744, 220)
+    z.kasten(('Alle Artikel', 'des Zeitraums', 'mm_artikel'), 20, 836, 200)
+    z.kasten(S['themen'], 240, 836, 200)
+    z.chip(240, 836, 200)
+    z.kasten(S['brief'], 120, 924, 220)
+    z.pfeil([(230, 726), (230, 742)])
+    z.pfeil([(230, 814), (230, 826), (120, 826), (120, 834)])
+    z.pfeil([(220, 871), (238, 871)])
+    z.pfeil([(340, 906), (340, 916), (230, 916), (230, 922)], betrieb=True)
+    return z.svg(460, 1004, thema, 'd-hoch', gross=True, titel=S_TITEL, text=S_TEXT)
+
+
+def suche_seite():
+    return suche('seite', 'dsq') + suche_hoch('seite')
+
+
+# ------------------------------------------------------------------ Probelauf Chat mit eigener Hardware
+# 2 Briefings und 8 Fragen als Chat mit Werkzeugaufrufen (messung/chat_probe.py), Modell vollständig im Grafikspeicher,
+# 32.000 Token Kontext, ohne Denkmodus; Median der Zeit bis zur fertigen Antwort. Gemessen am 21.11.2026.
+SKALA = 70   # Sekunden für die volle Balkenlänge
+PROBELAUF = [
+    # Karte, Art der Karte, Modell, Sekunden (Median), Antwortbeginn, Fragen/Min., passender Artikel verlinkt, Briefing (s)
+    ('Tesla P40', '24 GB Grafikspeicher', 'Gemma 4 26B-A4B', 13.5, 6.0, 4.5, '10/10', '10–14'),
+    ('Tesla P40', '24 GB Grafikspeicher', 'Qwen3.8-27B', 64.0, 25.5, 1, '10/10', '44–59'),
+]
+
+
+def zahl(x):
+    t = f'{x:.1f}'.rstrip('0').rstrip('.') if x < 100 else f'{x:.0f}'
+    return t.replace('.', ',')
+
+
+def probelauf(thema):
+    """Balkendiagramm des Probelaufs als SVG (docs/ausblick.md)."""
+    z = Zeichnung('pl')
+    x0, breite, zeile = 330, 430, 62
+    z.teile.append(f'<text class="d-bahntitel" x="16" y="22">Sekunden bis zur fertigen Antwort (Median, 10 Testfragen)</text>')
+    for n, (karte, preis, modell, sek, beginn, fpm, fund, brief) in enumerate(PROBELAUF):
+        y = 44 + n * zeile
+        w = max(4, breite * sek / SKALA)
+        wb = breite * beginn / SKALA
+        z.teile.append(f'<text class="d-t" x="16" y="{y + 18}">{escape(karte)} · {escape(modell)}</text>'
+                       f'<text class="d-d" x="16" y="{y + 36}">{escape(preis)}</text>'
+                       f'<rect class="d-kasten" x="{x0}" y="{y + 6}" width="{breite}" height="26" rx="6"/>'
+                       f'<rect class="d-balken" x="{x0}" y="{y + 6}" width="{w:.1f}" height="26" rx="6"/>'
+                       f'<rect class="d-balken2" x="{x0}" y="{y + 6}" width="{wb:.1f}" height="26" rx="6"/>'
+                       f'<text class="d-t" x="{x0 + breite + 16}" y="{y + 18}">{zahl(sek)} s</text>'
+                       f'<text class="d-d" x="{x0 + breite + 16}" y="{y + 36}">≈ {zahl(fpm)} {"Frage" if fpm == 1 else "Fragen"}/Min.</text>')
+    y = 44 + len(PROBELAUF) * zeile + 4
+    z.teile.append(f'<rect class="d-balken2" x="16" y="{y}" width="14" height="10" rx="3"/>'
+                   f'<text class="d-d" x="36" y="{y + 9}">bis die Antwort beginnt</text>'
+                   f'<rect class="d-balken" x="196" y="{y}" width="14" height="10" rx="3"/>'
+                   f'<text class="d-d" x="216" y="{y + 9}">bis sie fertig ist</text>')
+    svg = z.svg(900, y + 24, thema)
+    farben = THEMEN[thema]
+    return svg.replace('</style>', '.d-balken{fill:%s;opacity:.45}.d-balken2{fill:%s}</style>' % (farben['akzent'], farben['akzent']))
+
+
+def probelauf_html():
+    """Dieselben Werte als HTML-Balken für die Projektseite (passt sich jeder Breite an)."""
+    zeilen = []
+    for karte, preis, modell, sek, beginn, fpm, fund, brief in PROBELAUF:
+        zeilen.append(
+            f'          <li><div class="b-kopf"><b>{escape(karte)}</b> <span>{escape(preis)}</span><em>{escape(modell)}</em></div>'
+            f'<div class="b-spur" role="img" aria-label="{zahl(sek)} Sekunden je Antwort, Antwort beginnt nach {zahl(beginn)} Sekunden">'
+            f'<span class="b-voll" style="--w:{min(100, sek / SKALA * 100):.1f}%"></span><span class="b-beginn" style="--w:{beginn / SKALA * 100:.1f}%"></span></div>'
+            f'<div class="b-zahl"><p><b>{zahl(sek)} s</b> je Antwort</p><span>≈ {zahl(fpm)} {"Frage" if fpm == 1 else "Fragen"} pro Minute</span>'
+            f'<span>passender Artikel {fund} · <span class="nw">Briefing {brief} s</span></span></div></li>')
+    return '\n'.join(zeilen)
+
+
 def diagramm_seite():
     """Beide Fassungen für die Projektseite; CSS zeigt je nach Breite eine davon."""
     return quer('seite') + hoch('seite')
@@ -213,4 +365,6 @@ if __name__ == '__main__':
     ziel.mkdir(parents=True, exist_ok=True)
     for thema in ('hell', 'dunkel'):
         (ziel / f'ablauf-{thema}.svg').write_text(quer(thema) + '\n', encoding='utf-8')
+        (ziel / f'suche-{thema}.svg').write_text(suche(thema) + '\n', encoding='utf-8')
+        (ziel / f'probelauf-{thema}.svg').write_text(probelauf(thema) + '\n', encoding='utf-8')
     print('geschrieben:', ziel)

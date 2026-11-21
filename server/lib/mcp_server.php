@@ -467,20 +467,33 @@ function mm_w_neueste(array $a): array
 function mm_w_suchen(array $a): array
 {
     [$bool, $woerter] = mm_boolesch((string)($a['anfrage'] ?? ''));
-    $par = [$bool];
-    $w = mm_zeitfilter($a, $par);
     $n = max(1, min(50, (int)($a['anzahl'] ?? 15)));
-    $st = mm_db()->prepare("SELECT a.*, MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) s FROM mm_artikel a
-                            WHERE MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) $w ORDER BY a.veroeffentlicht DESC LIMIT $n");
-    $st->execute(array_merge([$bool], $par));
+    $holen = static function (string $q, string $ordnung) use ($a, $n): array {
+        $par = [$q];
+        $w = mm_zeitfilter($a, $par);
+        $st = mm_db()->prepare("SELECT a.*, MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) s FROM mm_artikel a
+                                WHERE MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) $w ORDER BY $ordnung LIMIT $n");
+        $st->execute(array_merge([$q], $par));
+        return $st->fetchAll();
+    };
+    $zeilen = $holen($bool, 'a.veroeffentlicht DESC');
+    $hinweis = 'Alle Wörter kommen vor; neueste zuerst. Vollständigen Text mit artikel_lesen (id).';
+    if (!$zeilen && substr_count($bool, '+') > 1) {
+        // Kein Artikel enthält alle Wörter: einzelne Wörter genügen, die besten Übereinstimmungen zuerst
+        $zeilen = $holen(str_replace('+', '', $bool), 's DESC, a.veroeffentlicht DESC');
+        $hinweis = 'Kein Artikel enthält alle Wörter; diese Treffer enthalten einzelne davon, die besten zuerst. '
+                 . 'Für Fragen in eigenen Worten passt bedeutung_suchen besser.';
+    }
+    if (!$zeilen) {
+        $hinweis = 'Keine Treffer. Mit anderen oder weniger Wörtern suchen, oder bedeutung_suchen mit der Frage in eigenen Worten.';
+    }
     $treffer = [];
-    foreach ($st->fetchAll() as $r) {
+    foreach ($zeilen as $r) {
         $e = mm_eintrag($r, 0);
         $e['text'] = mm_ausschnitt($r['text'], $woerter);
         $treffer[] = $e;
     }
-    return ['anfrage' => $a['anfrage'], 'treffer' => $treffer,
-            'hinweis' => 'Neueste zuerst. Vollständigen Text mit artikel_lesen (id).'];
+    return ['anfrage' => $a['anfrage'], 'treffer' => $treffer, 'hinweis' => $hinweis];
 }
 
 function mm_ausschnitt(string $text, array $woerter, int $breite = 320): string
