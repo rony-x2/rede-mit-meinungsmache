@@ -14,8 +14,8 @@ meinungsmache.de veröffentlicht zwei Arten von Artikeln: **Meldungen**, die ein
 
 | Werkzeug | Zweck |
 |---|---|
-| `briefing` | alle Artikel eines Zeitraums für ein Briefing: `morgen` (seit gestern 18 Uhr), `abend` (seit heute 6 Uhr), `tag`, `woche` oder ab einem Zeitpunkt |
-| `neueste` | Artikel nach Zeit, wahlweise nach Zeitraum, Quelle, Art oder Autor gefiltert |
+| `briefing` | alle Artikel eines Zeitraums für ein Briefing: `morgen` (seit gestern 18 Uhr), `abend` (seit heute 6 Uhr), `tag`, `woche` oder ab einem Zeitpunkt, mit Themen und wahlweise auf ein Thema eingegrenzt |
+| `neueste` | Artikel nach Zeit, wahlweise nach Zeitraum, Quelle, Art, Autor oder Thema gefiltert |
 | `bedeutung_suchen` | Suche nach Bedeutung: Frage in eigenen Worten (Vektoren und Volltext zusammen) |
 | `suchen` | Volltextsuche in Titel, Dachzeile und Text |
 | `artikel_lesen` | ein Artikel vollständig, mit Quelle, Link zum Original und den Links im Text |
@@ -33,22 +33,26 @@ Die Schnittstelle gibt dem Modell Regeln für die Antwort mit: wiedergeben, was 
 </picture>
 
 1. **Abruf:** `abruf.php` läuft stündlich per Cron. Es liest den RSS-Feed, holt neue Artikel von ihrer Seite und zerlegt sie in Titel, Dachzeile, Text, Quelle oder Autor, Link zum Original und die Links im Text. Junge Artikel werden einige Male erneut geprüft, falls sie nachträglich bearbeitet wurden ([docs/abruf.md](docs/abruf.md)).
-2. **Vektoren:** Jeder Artikel wird mit Qwen3-Embedding-0.6B eingebettet, lange Artikel in Teilen zu 350 Wörtern. Das Modell läuft auf eigener Hardware, ohne Cloud-Dienst.
-3. **Suche:** `bedeutung_suchen` bettet die Frage ein, vergleicht sie mit allen Textteilen und führt das Ergebnis mit der Volltextsuche zusammen (Reciprocal Rank Fusion).
-4. **Schnittstelle:** `mcp_server.php` spricht MCP über Streamable HTTP (Protokoll 2025-11-25, 2025-06-18 und 2025-03-26). Ein Konto ist nicht nötig, und es wird nur lesend zugegriffen.
+2. **Anreicherung:** Ein großes Sprachmodell (Gemma 4 26B-A4B auf eigener Grafikkarte) schreibt zu jedem Artikel Fragen in Alltagssprache, Suchbegriffe und ein bis drei Themen. Ein kleines Programm auf dem Rechner mit der Karte holt sich die Arbeit stündlich ab ([docs/anreicherung.md](docs/anreicherung.md)).
+3. **Vektoren:** Artikeltext und erzeugte Fragen werden mit Qwen3-Embedding-0.6B eingebettet, lange Artikel in Teilen zu 350 Wörtern. Beide Modelle laufen auf eigener Hardware, ohne Cloud-Dienst.
+4. **Suche:** `bedeutung_suchen` bettet die Frage ein, vergleicht sie mit den erzeugten Fragen und den Textteilen und führt beide Ranglisten zusammen (Reciprocal Rank Fusion). In einem Testsatz mit 34 Alltagsfragen steht der passende Artikel damit bei 31 auf Platz 1 und bei allen unter den ersten fünf, vorher bei 25 und 32 ([docs/anreicherung.md](docs/anreicherung.md#messung)).
+5. **Schnittstelle:** `mcp_server.php` spricht MCP über Streamable HTTP (Protokoll 2025-11-25, 2025-06-18 und 2025-03-26). Ein Konto ist nicht nötig, und es wird nur lesend zugegriffen.
 
 ## Verzeichnisse
 
 | Verzeichnis | Inhalt |
 |---|---|
-| [`server/lib/`](server/lib) | Abruf (`abruf.php`, `quelle.php`), MCP-Server, Datenbankzugang, Tabellenschema |
-| [`server/web/`](server/web) | öffentlicher Teil: Einstieg `mcp.php`, `stand.php` für die Projektseite, Umleitung, Zeichen und Favicons |
+| [`server/lib/`](server/lib) | Abruf (`abruf.php`, `quelle.php`), Anreicherung (`anreicherung.php`), MCP-Server, Datenbankzugang, Tabellenschema |
+| [`arbeiter/`](arbeiter) | `mm_anreichern.py` für den Rechner mit der Grafikkarte |
+| [`messung/`](messung) | Testsatz mit 34 Fragen, Messung über die Schnittstelle und Vergleich von Varianten auf dem Server |
+| [`server/web/`](server/web) | öffentlicher Teil: Einstieg `mcp.php`, `stand.php` für die Projektseite, `anreicherung.php` für den Arbeiter, Umleitung, Zeichen und Favicons |
 | [`seite/`](seite) | Projektseite: gebaute Seite (`index.html`), Vorlage, Bauskript, Diagramm, Zeichen, CSS (auch das gemeinsame `style.css` der PoC-Seite), JavaScript, Logos |
 | [`docs/`](docs) | Dokumentation, Diagramme unter `docs/bilder/` (erzeugt von `seite/diagramm.py`) |
 
 ## Dokumentation
 
 - [docs/abruf.md](docs/abruf.md): Quellen, Zerlegung der Artikelseiten, Aktualisierung, Einbettung, Grenzen
+- [docs/anreicherung.md](docs/anreicherung.md): Fragen, Suchbegriffe und Themen von einem lokalen Sprachmodell, Arbeiter, Messung
 - [docs/werkzeuge.md](docs/werkzeuge.md): Protokoll, Werkzeuge, Briefing, Anweisungen an das Modell, Einbindung in Clients
 - [docs/server.md](docs/server.md): Voraussetzungen, Verzeichnisse, Datenbank, Cron, Einbettungsdienst, Betrieb
 - [docs/projektseite.md](docs/projektseite.md): Aufbau und Gestaltung der Projektseite, Zeichen, Bauen

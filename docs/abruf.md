@@ -42,8 +42,8 @@ Beim Text werden Hinweiszeichen (ℹ︎), geschützte Leerzeichen und doppelte L
 1. Tabellen anlegen, falls sie fehlen (`schema.sql`).
 2. **Feed:** Jeder Artikel, der noch nicht in der Datenbank steht, wird geholt. Artikel, die jünger als 48 Stunden sind, werden zusätzlich alle sechs Stunden erneut geholt, damit nachträgliche Korrekturen ankommen.
 3. **Archiv** (nur mit `--nachholen`): Alle Adressen der Sitemap, die noch fehlen, neueste zuerst, höchstens `--max` (Voreinstellung 600).
-4. **Speichern:** `mm_speichern()` legt einen Artikel an oder aktualisiert ihn. Hat sich das Änderungsdatum geändert, werden seine Vektoren gelöscht und neu berechnet; die Links im Text werden jedes Mal neu geschrieben.
-5. **Einbetten:** Für alle Artikel ohne Vektoren (höchstens 1.000 je Lauf).
+4. **Speichern:** `mm_speichern()` legt einen Artikel an oder aktualisiert ihn. Hat sich das Änderungsdatum geändert, werden seine Vektoren und seine Anreicherung ([anreicherung.md](anreicherung.md)) gelöscht und neu erzeugt; die Links im Text werden jedes Mal neu geschrieben.
+5. **Einbetten:** Für alle Artikel ohne Vektoren (höchstens 1.000 je Lauf), danach die Fragen und Suchbegriffe aus der Anreicherung (höchstens 3.000 je Lauf).
 6. **Protokoll:** Eine Zeile in `mm_abruf` mit Zeit, Art des Laufs, Zahl neuer, geprüfter und eingebetteter Artikel, Fehlern und Dauer. Einträge älter als 90 Tage werden gelöscht.
 
 ```bash

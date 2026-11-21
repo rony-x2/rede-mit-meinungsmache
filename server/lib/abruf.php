@@ -5,7 +5,7 @@
  *
  *   php abruf.php                 Feed prüfen, neue Artikel holen, junge Artikel auf Änderungen prüfen, einbetten
  *   php abruf.php --nachholen     zusätzlich fehlende Artikel aus der Sitemap holen (Archiv), --max=N, --pause=Sekunden
- *   php abruf.php --einbetten     nur fehlende Vektoren berechnen
+ *   php abruf.php --einbetten     nur fehlende Vektoren berechnen (Artikel und Fragen aus der Anreicherung)
  *   php abruf.php --neu=SLUG      einen Artikel neu holen
  */
 declare(strict_types=1);
@@ -16,6 +16,7 @@ if (PHP_SAPI !== 'cli') {
 }
 require __DIR__ . '/db.php';
 require __DIR__ . '/quelle.php';
+require __DIR__ . '/anreicherung.php';
 
 const MM_TEIL_WOERTER = 350;     // Wörter je Textteil für die Einbettung
 
@@ -49,6 +50,7 @@ function mm_speichern(PDO $db, array $a): int
            ->execute([...$werte, $id]);
         if ($z['geaendert'] !== $a['geaendert']) {
             $db->prepare('DELETE FROM mm_vektor WHERE artikel_id = ?')->execute([$id]);   // neu einbetten
+            mm_anr_verwerfen($db, $id);                                                     // und neu anreichern
         }
     } else {
         $db->prepare('INSERT INTO mm_artikel (url, titel, unterzeile, text, zeichen, art, quelle, original_url, autor, autor_url,
@@ -125,7 +127,7 @@ $holen = static function (string $slug) use ($db, &$neu, &$geaendert, &$fehler, 
     usleep((int)($pause * 1e6));
 };
 
-$art = 'feed';
+$art = isset($opt['einbetten']) ? 'einbetten' : 'feed';
 if (isset($opt['neu'])) {
     $holen((string)$opt['neu']);
 } elseif (!isset($opt['einbetten'])) {
@@ -157,7 +159,8 @@ if (isset($opt['neu'])) {
     }
 }
 $eingebettet = mm_einbetten($db, 1000, $log);
-$log("fertig: $neu neu, $geaendert erneut geprüft, $eingebettet eingebettet, " . count($fehler) . ' Fehler');
+$fragen = mm_anr_einbetten($db, 3000, $log);     // Fragen und Suchbegriffe aus der Anreicherung (arbeiter/mm_anreichern.py)
+$log("fertig: $neu neu, $geaendert erneut geprüft, $eingebettet eingebettet, $fragen Fragen eingebettet, " . count($fehler) . ' Fehler');
 $db->prepare('INSERT INTO mm_abruf (zeit, art, neu, geaendert, eingebettet, fehler, dauer) VALUES (UTC_TIMESTAMP(),?,?,?,?,?,?)')
    ->execute([$art, $neu, $geaendert, $eingebettet, $fehler ? implode("\n", array_slice($fehler, 0, 20)) : null,
               round(microtime(true) - $t0, 1)]);

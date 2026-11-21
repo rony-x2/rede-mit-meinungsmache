@@ -44,10 +44,37 @@ CREATE TABLE IF NOT EXISTS mm_vektor (
 CREATE TABLE IF NOT EXISTS mm_abruf (
     id        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     zeit      DATETIME     NOT NULL,
-    art       VARCHAR(20)  NOT NULL COMMENT 'feed, nachholen',
+    art       VARCHAR(20)  NOT NULL COMMENT 'feed, nachholen, einbetten',
     neu       SMALLINT UNSIGNED NOT NULL DEFAULT 0,
     geaendert SMALLINT UNSIGNED NOT NULL DEFAULT 0,
     eingebettet SMALLINT UNSIGNED NOT NULL DEFAULT 0,
     fehler    TEXT         NULL,
     dauer     FLOAT        NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- Anreicherung durch ein lokales Sprachmodell (Gemma 4 auf eigener Hardware, siehe docs/anreicherung.md):
+-- typische Fragen, Suchbegriffe und Themen je Artikel. Dient nur der Suche und der Gliederung von Briefings;
+-- Antworten kommen immer aus dem Artikeltext.
+CREATE TABLE IF NOT EXISTS mm_anreicherung (
+    artikel_id   INT UNSIGNED NOT NULL PRIMARY KEY,
+    modell       VARCHAR(120) NOT NULL,
+    zeit         DATETIME     NOT NULL COMMENT 'UTC',
+    fragen       TEXT         NOT NULL COMMENT 'JSON-Liste',
+    stichwoerter TEXT         NOT NULL COMMENT 'JSON-Liste',
+    themen       VARCHAR(300) NOT NULL COMMENT 'JSON-Liste aus MM_THEMEN'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+CREATE TABLE IF NOT EXISTS mm_thema (
+    artikel_id INT UNSIGNED NOT NULL,
+    thema      VARCHAR(60)  NOT NULL,
+    PRIMARY KEY (artikel_id, thema),
+    KEY ix_thema (thema)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+CREATE TABLE IF NOT EXISTS mm_frage (
+    artikel_id INT UNSIGNED      NOT NULL,
+    nr         TINYINT UNSIGNED  NOT NULL COMMENT '0 = Suchbegriffe, ab 1 erzeugte Fragen',
+    text       VARCHAR(600)      NOT NULL,
+    vektor     VECTOR(384)       NULL COMMENT 'mit derselben Anweisung eingebettet wie Suchanfragen',
+    PRIMARY KEY (artikel_id, nr)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;

@@ -38,6 +38,10 @@ Für die Suche nach Bedeutung muss der Server Texte mit **Qwen3-Embedding-0.6B**
 
 Der Server kürzt die Vektoren auf 384 Dimensionen und normiert sie. Auf einer CPU dauert eine Frage etwa 0,15 Sekunden, ein Artikel unter einer Sekunde.
 
+## Anreicherung
+
+Fragen, Suchbegriffe und Themen schreibt ein Sprachmodell auf einem Rechner mit Grafikkarte; das Programm dafür und seine Einrichtung beschreibt [anreicherung.md](anreicherung.md). Ohne Anreicherung arbeitet die Schnittstelle weiter, nur ohne Themen und mit etwas weniger treffsicherer Suche nach Bedeutung.
+
 ## Erster Lauf und Cron
 
 ```bash

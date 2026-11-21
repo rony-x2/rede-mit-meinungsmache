@@ -9,7 +9,7 @@
 
 ## Werkzeuge
 
-Zeiten in Ein- und Ausgaben gelten in deutscher Zeit (Europe/Berlin), gespeichert wird in UTC. Jede Antwort außer `search` und `fetch` enthält das Feld `quelle_hinweis` mit der Quellenangabe.
+Zeiten in Ein- und Ausgaben gelten in deutscher Zeit (Europe/Berlin), gespeichert wird in UTC. Angereicherte Artikel tragen das Feld `themen` (ein bis drei aus einer festen Liste, siehe [anreicherung.md](anreicherung.md)); `briefing` und `neueste` lassen sich mit `thema` darauf eingrenzen. Jede Antwort außer `search` und `fetch` enthält das Feld `quelle_hinweis` mit der Quellenangabe.
 
 ### `briefing`
 
@@ -22,15 +22,15 @@ Alle Artikel eines Zeitraums, neueste zuerst, getrennt in `meldungen` und `eigen
 | `tag` (Voreinstellung) | vor 24 Stunden |
 | `woche` | vor 7 Tagen |
 
-Mit `seit` (etwa `2026-11-19T12:00`) gilt stattdessen ein eigener Anfang. Das Feld `hinweis` sagt dem Modell, wie es das Briefing schreiben soll; ist der Zeitraum leer, schlägt es einen längeren vor.
+Mit `seit` (etwa `2026-11-19T12:00`) gilt stattdessen ein eigener Anfang, mit `thema` nur ein Thema. Das Feld `themen` der Antwort zählt, wie oft jedes Thema im Zeitraum vorkommt, als Gerüst für die Gliederung. Das Feld `hinweis` sagt dem Modell, wie es das Briefing schreiben soll; ist der Zeitraum leer, schlägt es einen längeren vor.
 
 ### `neueste`
 
-Artikel nach Zeit, neueste zuerst, mit Kurztext (320 Zeichen). Filter: `seit`, `bis` (ein reines Datum gilt bis zum Tagesende), `quelle` (Teil des Namens, etwa „Tagesschau“), `art` (`meldung` oder `eigen`), `autor`; `anzahl` 1 bis 60.
+Artikel nach Zeit, neueste zuerst, mit Kurztext (320 Zeichen). Filter: `seit`, `bis` (ein reines Datum gilt bis zum Tagesende), `quelle` (Teil des Namens, etwa „Tagesschau“), `art` (`meldung` oder `eigen`), `autor`, `thema`; `anzahl` 1 bis 60.
 
 ### `bedeutung_suchen`
 
-Findet Artikel zu einer Frage oder einem Thema in eigenen Worten. Die Frage wird mit Suchanweisung eingebettet ([abruf.md](abruf.md#einbettung)) und exakt mit allen Textteilen verglichen (Kosinusabstand, je Artikel der beste Teil). Parallel läuft eine Volltextsuche mit den tragenden Wörtern der Frage (ohne Füllwörter wie „was“, „sich“, „beim“, jeweils als Wortanfang). Beide Ranglisten (je 60 Plätze) werden mit Reciprocal Rank Fusion (k = 60) zusammengeführt, der Volltext mit halbem Gewicht: Bei Nachrichten trägt die Bedeutung mehr, die Wörter helfen bei Namen und seltenen Begriffen. Das Feld `naehe` (1 − Abstand) zeigt die inhaltliche Nähe. Ist die Einbettung nicht erreichbar, antwortet das Werkzeug nur aus dem Volltext und sagt das im Feld `verfahren`. Optional `seit`, `bis`, `anzahl` (bis 30).
+Findet Artikel zu einer Frage oder einem Thema in eigenen Worten. Die Frage wird mit Suchanweisung eingebettet ([abruf.md](abruf.md#einbettung)) und exakt verglichen (Kosinusabstand), zum einen mit allen Textteilen der Artikel, zum anderen mit den vorab erzeugten Fragen ([anreicherung.md](anreicherung.md)); je Artikel zählt der beste Teil bzw. die beste Frage. Beide Ranglisten (je 60 Plätze) werden mit Reciprocal Rank Fusion (k = 60) zusammengeführt, Fragen mit dem Gewicht 1,0, Text mit 0,75. Eine Volltextsuche mit den tragenden Wörtern der Frage springt nur ein, wenn die Einbettung nicht erreichbar ist; in der Messung hat sie die Ergebnisse verschlechtert. Das Feld `naehe` (1 − Abstand) zeigt die inhaltliche Nähe. Ist die Einbettung nicht erreichbar, antwortet das Werkzeug nur aus dem Volltext und sagt das im Feld `verfahren`. Optional `seit`, `bis`, `anzahl` (bis 30).
 
 ### `suchen`
 
@@ -46,7 +46,7 @@ Medien, deren Berichte die Meldungen zusammenfassen, mit Anzahl und letztem Datu
 
 ### `ueberblick`
 
-Zahl der Artikel, Meldungen und eigenen Artikel, Zeitraum, letzter Abruf, die zwölf häufigsten Quellen und die Autorinnen und Autoren.
+Zahl der Artikel, Meldungen und eigenen Artikel, Zeitraum, letzter Abruf, die zwölf häufigsten Quellen, die Autorinnen und Autoren, die Themen mit Anzahl und wie viele Artikel angereichert sind.
 
 ### `search`, `fetch`
 

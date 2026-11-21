@@ -1,0 +1,385 @@
+{
+ "werte": {
+  "fragen": 34,
+  "platz1": 31,
+  "top5": 34,
+  "top10": 34,
+  "mrr": 0.956
+ },
+ "fragen": [
+  {
+   "frage": "Was tut sich beim Klimaschutz?",
+   "platz": 1,
+   "top5": [
+    364,
+    277,
+    356,
+    116,
+    388
+   ]
+  },
+  {
+   "frage": "Wie teuer ist Tanken gerade?",
+   "platz": 1,
+   "top5": [
+    279,
+    236,
+    216,
+    259,
+    408
+   ]
+  },
+  {
+   "frage": "Gibt es Neuigkeiten zum Verbrennerverbot?",
+   "platz": 1,
+   "top5": [
+    187,
+    436,
+    140,
+    259,
+    262
+   ]
+  },
+  {
+   "frage": "Wie läuft es bei VW?",
+   "platz": 1,
+   "top5": [
+    91,
+    2,
+    328,
+    219,
+    125
+   ]
+  },
+  {
+   "frage": "Was ist mit der Rente los?",
+   "platz": 1,
+   "top5": [
+    157,
+    231,
+    356,
+    435,
+    156
+   ]
+  },
+  {
+   "frage": "Wird der Strom billiger?",
+   "platz": 1,
+   "top5": [
+    38,
+    37,
+    160,
+    14,
+    321
+   ]
+  },
+  {
+   "frage": "Wer hat die Wahl in Serbien gewonnen?",
+   "platz": 1,
+   "top5": [
+    100,
+    112,
+    295,
+    287,
+    316
+   ]
+  },
+  {
+   "frage": "Wie sind die Zwischenwahlen in Amerika ausgegangen?",
+   "platz": 1,
+   "top5": [
+    74,
+    78,
+    61,
+    172,
+    72
+   ]
+  },
+  {
+   "frage": "Werden Frauen bei der Bundeswehr belästigt?",
+   "platz": 1,
+   "top5": [
+    223,
+    144,
+    40,
+    293,
+    117
+   ]
+  },
+  {
+   "frage": "Gab es Sabotage an der Stromversorgung?",
+   "platz": 2,
+   "top5": [
+    313,
+    325,
+    336,
+    371,
+    397
+   ]
+  },
+  {
+   "frage": "Ist Deutschland gegen Drohnen geschützt?",
+   "platz": 1,
+   "top5": [
+    386,
+    399,
+    404,
+    339,
+    31
+   ]
+  },
+  {
+   "frage": "Wie viele Menschen sind an der Hitze gestorben?",
+   "platz": 1,
+   "top5": [
+    405,
+    377,
+    363,
+    270,
+    63
+   ]
+  },
+  {
+   "frage": "Wer hat den Friedensnobelpreis bekommen?",
+   "platz": 1,
+   "top5": [
+    182,
+    189,
+    168,
+    60,
+    155
+   ]
+  },
+  {
+   "frage": "Was ist mit den Spenden an Alice Weidel?",
+   "platz": 1,
+   "top5": [
+    107,
+    95,
+    434,
+    241,
+    379
+   ]
+  },
+  {
+   "frage": "Gibt es gerade viele Masernfälle?",
+   "platz": 1,
+   "top5": [
+    16,
+    52,
+    270,
+    405,
+    178
+   ]
+  },
+  {
+   "frage": "Was stand in den geleakten Mails der AfD?",
+   "platz": 2,
+   "top5": [
+    95,
+    123,
+    66,
+    342,
+    209
+   ]
+  },
+  {
+   "frage": "Warum gehen junge Leute auf die Straße?",
+   "platz": 1,
+   "top5": [
+    20,
+    113,
+    5,
+    81,
+    127
+   ]
+  },
+  {
+   "frage": "Wird Essen teurer?",
+   "platz": 1,
+   "top5": [
+    230,
+    220,
+    321,
+    279,
+    394
+   ]
+  },
+  {
+   "frage": "Spioniert China bei Chipherstellern?",
+   "platz": 1,
+   "top5": [
+    56,
+    193,
+    194,
+    82,
+    50
+   ]
+  },
+  {
+   "frage": "Wer will die SPD führen?",
+   "platz": 1,
+   "top5": [
+    30,
+    130,
+    126,
+    239,
+    195
+   ]
+  },
+  {
+   "frage": "Wie viele Firmen gehen pleite?",
+   "platz": 1,
+   "top5": [
+    296,
+    229,
+    119,
+    211,
+    185
+   ]
+  },
+  {
+   "frage": "Sollen Kinder kein Social Media mehr nutzen dürfen?",
+   "platz": 1,
+   "top5": [
+    274,
+    357,
+    384,
+    226,
+    381
+   ]
+  },
+  {
+   "frage": "Was hilft gegen die Wohnungsnot in Berlin?",
+   "platz": 2,
+   "top5": [
+    289,
+    238,
+    249,
+    433,
+    244
+   ]
+  },
+  {
+   "frage": "Will Trump wirklich Grönland kaufen?",
+   "platz": 1,
+   "top5": [
+    431,
+    243,
+    257,
+    164,
+    137
+   ]
+  },
+  {
+   "frage": "Wie gut sind deutsche Schüler im internationalen Vergleich?",
+   "platz": 1,
+   "top5": [
+    310,
+    387,
+    127,
+    386,
+    275
+   ]
+  },
+  {
+   "frage": "Wie verkaufen sich E-Autos?",
+   "platz": 1,
+   "top5": [
+    331,
+    121,
+    264,
+    251,
+    436
+   ]
+  },
+  {
+   "frage": "Gibt es einen Spion beim deutschen Geheimdienst?",
+   "platz": 1,
+   "top5": [
+    193,
+    82,
+    194,
+    330,
+    382
+   ]
+  },
+  {
+   "frage": "Kommt eine Steuer auf Softdrinks?",
+   "platz": 1,
+   "top5": [
+    359,
+    154,
+    281,
+    262,
+    259
+   ]
+  },
+  {
+   "frage": "Wie viele russische Soldaten sind im Krieg gestorben?",
+   "platz": 1,
+   "top5": [
+    11,
+    293,
+    199,
+    62,
+    45
+   ]
+  },
+  {
+   "frage": "Warum gingen Outlook und Teams nicht?",
+   "platz": 1,
+   "top5": [
+    33,
+    407,
+    256,
+    123,
+    23
+   ]
+  },
+  {
+   "frage": "Was hält die Redaktion von der Fußball-WM?",
+   "platz": 1,
+   "top5": [
+    417,
+    416,
+    430,
+    410,
+    409
+   ]
+  },
+  {
+   "frage": "Wie viel mehr verdienen Chefs als ihre Angestellten?",
+   "platz": 1,
+   "top5": [
+    369,
+    394,
+    365,
+    391,
+    3
+   ]
+  },
+  {
+   "frage": "Wird in Deutschland das Wasser knapp?",
+   "platz": 1,
+   "top5": [
+    432,
+    109,
+    208,
+    397,
+    320
+   ]
+  },
+  {
+   "frage": "Wie geht es den Menschen in Gaza?",
+   "platz": 1,
+   "top5": [
+    170,
+    178,
+    288,
+    372,
+    105
+   ]
+  }
+ ]
+}

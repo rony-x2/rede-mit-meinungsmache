@@ -11,6 +11,7 @@
  */
 declare(strict_types=1);
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/anreicherung.php';
 
 const MM_VERSIONEN     = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const MM_NAME          = 'meinungsmache';
@@ -27,12 +28,18 @@ const MM_CLIENT_MINUTE = 120;
 const MM_CLIENT_STUNDE = 1500;
 const MM_MAX_ZEICHEN   = 60000;
 const MM_ZONE          = 'Europe/Berlin';
+// Gewichte der Ranglisten in bedeutung_suchen (Reciprocal Rank Fusion, k = 60), gemessen mit messung/varianten.php
+// am 21.11.2026 (34 Testfragen): Fragen + Text 31× Platz 1, nur Text 29×, Text + Volltext 25×. Suchbegriffe und
+// Volltext brachten nichts oder schadeten; der Volltext springt nur ein, wenn die Einbettung nicht erreichbar ist.
+const MM_GEWICHT_FRAGEN = 1.0;    // erzeugte Fragen (Frage gegen Frage)
+const MM_GEWICHT_STICH  = 0.0;    // Suchbegriffe als ein Vektor
+const MM_GEWICHT_TEXT   = 0.75;   // Artikeltext
+const MM_GEWICHT_VOLL   = 0.0;    // Volltext mit den tragenden Wörtern (Ersatz ohne Einbettung: 1,0)
 const MM_ORIGINS       = ['https://claude.ai', 'https://claude.com', 'https://www.claude.ai',
                           'https://chatgpt.com', 'https://chat.openai.com', 'https://poc.deutschkaemer.info'];
 const MM_QUELLE = 'Quelle: meinungsmache.de – Nachrichten, Meinungen und Analysen. Meldungen fassen Berichte anderer Medien zusammen '
     . '(Originalquelle jeweils angegeben), eigene Artikel stammen von der Redaktion. Texte © meinungsmache.de bzw. den Originalmedien; '
     . 'stündlich abgerufen und aufbereitet von Dennis Deutschkämer (inoffiziell, maßgeblich ist meinungsmache.de).';
-const MM_VEK_ANWEISUNG = "Instruct: Given a question or topic about current German news, retrieve news articles that address it\nQuery: ";
 
 final class MmFehler extends RuntimeException {}     // Protokollfehler (JSON-RPC error)
 final class MmEingabe extends RuntimeException {}    // Werkzeugfehler, den das Modell beheben kann (isError)
@@ -125,9 +132,9 @@ Artikel der Nachrichtenseite meinungsmache.de („Aktuelle Nachrichten, Meinunge
 
 Einordnung: meinungsmache.de wählt Themen aus und ordnet sie teils wertend ein. Antworten geben wieder, was dort steht, und machen das kenntlich („laut meinungsmache.de“, „in einem Beitrag von Gerrit heißt es …“). Bei Meldungen die Originalquelle nennen und verlinken; Meinungsbeiträge als Meinung der Autorin bzw. des Autors kennzeichnen. Keine eigene Bewertung von Personen, Parteien oder Positionen hinzufügen; für eine ausgewogene Einordnung auf weitere Quellen hinweisen.
 
-Briefing (z. B. „Was war heute Morgen los?“, „Mach mir ein Abendbriefing“): Werkzeug `briefing` mit zeitraum morgen (seit gestern 18 Uhr), abend (seit heute 6 Uhr), tag (24 Stunden) oder woche. Daraus ein kurzes Briefing schreiben: Zeitraum nennen, nach Themen gruppieren, je Meldung ein bis zwei Sätze, jeweils mit Link zum Artikel auf meinungsmache.de und – falls vorhanden – zur Originalquelle; eigene Artikel der Redaktion gesondert aufführen. Uhrzeiten in deutscher Zeit.
+Briefing (z. B. „Was war heute Morgen los?“, „Mach mir ein Abendbriefing“): Werkzeug `briefing` mit zeitraum morgen (seit gestern 18 Uhr), abend (seit heute 6 Uhr), tag (24 Stunden) oder woche. Daraus ein kurzes Briefing schreiben: Zeitraum nennen, nach Themen gruppieren (Feld themen je Artikel, Übersicht im Feld themen der Antwort), je Meldung ein bis zwei Sätze, jeweils mit Link zum Artikel auf meinungsmache.de und – falls vorhanden – zur Originalquelle; eigene Artikel der Redaktion gesondert aufführen. Uhrzeiten in deutscher Zeit.
 
-Vorgehen bei Fragen: `bedeutung_suchen` (Frage in eigenen Worten) oder `suchen` (genaue Wörter), dann `artikel_lesen` für den vollständigen Text mit Quellenlinks. `neueste` listet Artikel nach Zeit, wahlweise nach Quelle oder Art gefiltert; `quellen` zeigt, aus welchen Medien die Meldungen stammen; `ueberblick` nennt Umfang und Stand.
+Vorgehen bei Fragen: `bedeutung_suchen` (Frage in eigenen Worten) oder `suchen` (genaue Wörter), dann `artikel_lesen` für den vollständigen Text mit Quellenlinks. `neueste` listet Artikel nach Zeit, wahlweise nach Quelle, Art, Autor oder Thema gefiltert; mit `thema` lässt sich auch das Briefing eingrenzen (etwa nur „Klima und Umwelt“); `quellen` zeigt, aus welchen Medien die Meldungen stammen; `ueberblick` nennt Umfang und Stand.
 
 Urheberrecht: Die Texte gehören meinungsmache.de bzw. den Originalmedien. Zusammenfassen und verlinken, nicht vollständig wiedergeben; kurze Zitate kenntlich machen.
 
@@ -138,6 +145,7 @@ TXT;
 function mm_werkzeugliste(): array
 {
     $ro = ['readOnlyHint' => true, 'openWorldHint' => false];
+    $thema = ['type' => 'string', 'enum' => MM_THEMEN, 'description' => 'nur Artikel zu diesem Thema (Themen vergibt ein lokales Sprachmodell; neue Artikel erst nach der Anreicherung)'];
     $zeit = ['seit' => ['type' => 'string', 'description' => 'Ab diesem Zeitpunkt (ISO-Datum oder Datum mit Uhrzeit, deutsche Zeit), z. B. 2026-11-20 oder 2026-11-20T18:00'],
              'bis'  => ['type' => 'string', 'description' => 'Bis zu diesem Zeitpunkt (wie seit)']];
     return [
@@ -149,17 +157,19 @@ function mm_werkzeugliste(): array
          'inputSchema' => ['type' => 'object', 'properties' => [
              'zeitraum' => ['type' => 'string', 'enum' => ['morgen', 'abend', 'tag', 'woche'], 'default' => 'tag'],
              'seit' => $zeit['seit'],
+             'thema' => $thema,
          ]], 'annotations' => $ro],
         ['name' => 'neueste', 'title' => 'Neueste Artikel',
-         'description' => 'Artikel nach Zeit, neueste zuerst; wahlweise nach Zeitraum, Quelle (z. B. Tagesschau) oder Art (meldung, eigen) gefiltert. Liefert Kurztexte; den vollen Text mit artikel_lesen.',
+         'description' => 'Artikel nach Zeit, neueste zuerst; wahlweise nach Zeitraum, Quelle (z. B. Tagesschau), Art (meldung, eigen), Autor oder Thema gefiltert. Liefert Kurztexte; den vollen Text mit artikel_lesen.',
          'inputSchema' => ['type' => 'object', 'properties' => $zeit + [
              'quelle' => ['type' => 'string', 'description' => 'Medium der Originalmeldung, z. B. Tagesschau'],
              'art' => ['type' => 'string', 'enum' => ['meldung', 'eigen']],
              'autor' => ['type' => 'string'],
+             'thema' => $thema,
              'anzahl' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 60, 'default' => 20],
          ]], 'annotations' => $ro],
         ['name' => 'bedeutung_suchen', 'title' => 'Suche nach Bedeutung',
-         'description' => 'Findet Artikel zu einer Frage oder einem Thema in eigenen Worten, auch wenn andere Begriffe verwendet werden (Vektoren und Volltext zusammen).',
+         'description' => 'Findet Artikel zu einer Frage oder einem Thema in eigenen Worten, auch wenn andere Begriffe verwendet werden (Vektoren über Artikeltext und vorab erzeugte Fragen).',
          'inputSchema' => ['type' => 'object', 'required' => ['frage'], 'properties' => [
              'frage' => ['type' => 'string', 'minLength' => 3, 'maxLength' => 500],
          ] + $zeit + ['anzahl' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 30, 'default' => 10]]], 'annotations' => $ro],
@@ -265,6 +275,17 @@ function mm_zeitfilter(array $a, array &$par, string $sp = 'a.veroeffentlicht'):
     return $w;
 }
 
+function mm_thema_pruefen(array $a): ?string
+{
+    if (empty($a['thema'])) {
+        return null;
+    }
+    if (!in_array($a['thema'], MM_THEMEN, true)) {
+        throw new MmEingabe('thema: eines von ' . implode(', ', MM_THEMEN));
+    }
+    return $a['thema'];
+}
+
 function mm_kurz(string $text, int $n = 320): string
 {
     $text = preg_replace('/\s+/u', ' ', $text);
@@ -272,6 +293,15 @@ function mm_kurz(string $text, int $n = 320): string
 }
 
 /** Artikel als Treffer: knapp, mit Links. */
+/** Themen eines Artikels aus der Anreicherung (leer, solange er nicht angereichert ist). */
+function mm_themen_von(int $id): array
+{
+    static $st = null;
+    $st ??= mm_db()->prepare('SELECT thema FROM mm_thema WHERE artikel_id = ? ORDER BY thema');
+    $st->execute([$id]);
+    return $st->fetchAll(PDO::FETCH_COLUMN);
+}
+
 function mm_eintrag(array $a, int $kurz = 320): array
 {
     $e = ['id' => (int)$a['id'], 'zeit' => mm_zeit($a['veroeffentlicht']), 'titel' => $a['titel']];
@@ -283,6 +313,9 @@ function mm_eintrag(array $a, int $kurz = 320): array
         $e['autor'] = $a['autor'] ?: 'Redaktion';
     } else {
         $e['quelle'] = $a['quelle'];
+    }
+    if ($th = mm_themen_von((int)$a['id'])) {
+        $e['themen'] = $th;
     }
     $e['text'] = $kurz > 0 ? mm_kurz($a['text'], $kurz) : $a['text'];
     $e['url'] = $a['url'];
@@ -320,7 +353,7 @@ function mm_stand(): array
 {
     $db = mm_db();
     $z = $db->query('SELECT COUNT(*) n, MIN(veroeffentlicht) von, MAX(veroeffentlicht) bis FROM mm_artikel')->fetch();
-    $ab = $db->query('SELECT zeit FROM mm_abruf ORDER BY id DESC LIMIT 1')->fetchColumn();
+    $ab = $db->query('SELECT zeit FROM mm_abruf WHERE art <> \'einbetten\' ORDER BY id DESC LIMIT 1')->fetchColumn();
     return ['artikel' => (int)$z['n'], 'von' => mm_zeit($z['von']), 'bis' => mm_zeit($z['bis']),
             'letzter_abruf' => mm_zeit($ab ?: null)];
 }
@@ -343,6 +376,8 @@ function mm_w_ueberblick(): array
         'eigene_artikel' => (int)($arten['eigen'] ?? 0),
         'haeufigste_quellen' => array_map('intval', $quellen),
         'autoren_eigene_artikel' => array_map('intval', $autoren),
+        'themen' => array_map('intval', $db->query('SELECT thema, COUNT(*) n FROM mm_thema GROUP BY thema ORDER BY n DESC')->fetchAll(PDO::FETCH_KEY_PAIR)),
+        'angereichert' => (int)$db->query('SELECT COUNT(*) FROM mm_anreicherung')->fetchColumn(),
         'webseite' => 'https://meinungsmache.de',
     ];
 }
@@ -365,8 +400,11 @@ function mm_w_briefing(array $a): array
         };
     }
     $seitUtc = $seit->setTimezone(new DateTimeZone('UTC'))->format('Y-m-d H:i:s');
-    $st = mm_db()->prepare('SELECT * FROM mm_artikel WHERE veroeffentlicht >= ? ORDER BY veroeffentlicht DESC LIMIT 120');
-    $st->execute([$seitUtc]);
+    $thema = mm_thema_pruefen($a);
+    $st = mm_db()->prepare('SELECT a.* FROM mm_artikel a WHERE a.veroeffentlicht >= ?'
+        . ($thema ? ' AND EXISTS (SELECT 1 FROM mm_thema t WHERE t.artikel_id = a.id AND t.thema = ?)' : '')
+        . ' ORDER BY a.veroeffentlicht DESC LIMIT 120');
+    $st->execute($thema ? [$seitUtc, $thema] : [$seitUtc]);
     $alle = $st->fetchAll();
     $meldungen = [];
     $eigene = [];
@@ -379,11 +417,25 @@ function mm_w_briefing(array $a): array
     }
     return [
         'zeitraum' => $art, 'seit' => $seit->setTimezone($tz)->format('Y-m-d H:i'), 'bis' => $jetzt->format('Y-m-d H:i'),
-        'anzahl' => count($alle), 'meldungen' => $meldungen, 'eigene_artikel' => $eigene,
-        'hinweis' => $alle ? 'Für das Briefing nach Themen gruppieren, je Meldung ein bis zwei Sätze, mit Link zum Artikel und zur Originalquelle; eigene Artikel der Redaktion gesondert nennen und als deren Beitrag kennzeichnen.'
+        'anzahl' => count($alle), 'themen' => mm_themen_zaehlen(array_merge($meldungen, $eigene)),
+        'meldungen' => $meldungen, 'eigene_artikel' => $eigene,
+        'hinweis' => $alle ? 'Für das Briefing nach Themen gruppieren (Feld themen je Artikel; noch nicht angereicherte Artikel selbst zuordnen), je Meldung ein bis zwei Sätze, mit Link zum Artikel und zur Originalquelle; eigene Artikel der Redaktion gesondert nennen und als deren Beitrag kennzeichnen.'
                           : 'In diesem Zeitraum sind keine Artikel erschienen. Mit zeitraum „tag“ oder „woche“ lässt sich weiter zurückblicken.',
         'stand' => mm_stand(),
     ];
+}
+
+/** Wie oft jedes Thema in einer Trefferliste vorkommt. */
+function mm_themen_zaehlen(array $eintraege): array
+{
+    $z = [];
+    foreach ($eintraege as $e) {
+        foreach ($e['themen'] ?? [] as $t) {
+            $z[$t] = ($z[$t] ?? 0) + 1;
+        }
+    }
+    arsort($z);
+    return $z;
 }
 
 function mm_w_neueste(array $a): array
@@ -401,6 +453,10 @@ function mm_w_neueste(array $a): array
     if (!empty($a['autor'])) {
         $w .= ' AND a.autor LIKE ?';
         $par[] = '%' . str_replace(['%', '_'], '', (string)$a['autor']) . '%';
+    }
+    if ($thema = mm_thema_pruefen($a)) {
+        $w .= ' AND EXISTS (SELECT 1 FROM mm_thema t WHERE t.artikel_id = a.id AND t.thema = ?)';
+        $par[] = $thema;
     }
     $n = max(1, min(60, (int)($a['anzahl'] ?? 20)));
     $st = mm_db()->prepare("SELECT a.* FROM mm_artikel a WHERE 1 $w ORDER BY a.veroeffentlicht DESC LIMIT $n");
@@ -482,19 +538,35 @@ function mm_w_bedeutung(array $a): array
         $st->execute(array_merge([mm_vektor_text($v)], $par));
         foreach ($st->fetchAll() as $i => $r) {
             $id = (int)$r['artikel_id'];
-            $punkte[$id] = ($punkte[$id] ?? 0) + 1.0 / (60 + $i + 1);
+            $punkte[$id] = ($punkte[$id] ?? 0) + MM_GEWICHT_TEXT / (60 + $i + 1);
             $naehe[$id] = round(1 - (float)$r['d'], 3);
         }
     }
-    // Volltext als zweite Rangliste: nur die tragenden Wörter der Frage (ohne Füllwörter), als Wortanfang, halb gewichtet
+    if ($v && (MM_GEWICHT_FRAGEN > 0 || MM_GEWICHT_STICH > 0)) {
+        // erzeugte Fragen (nr > 0) und Suchbegriffe (nr = 0) aus der Anreicherung, je Artikel die nächste
+        foreach ([['nr > 0', MM_GEWICHT_FRAGEN], ['nr = 0', MM_GEWICHT_STICH]] as [$bed, $g]) {
+            if ($g <= 0) {
+                continue;
+            }
+            $st = $db->prepare("SELECT f.artikel_id, MIN(VEC_DISTANCE_COSINE(f.vektor, VEC_FromText(?))) d
+                                FROM mm_frage f JOIN mm_artikel a ON a.id = f.artikel_id WHERE f.$bed AND f.vektor IS NOT NULL $zeit
+                                GROUP BY f.artikel_id ORDER BY d LIMIT 60");
+            $st->execute(array_merge([mm_vektor_text($v)], $par));
+            foreach ($st->fetchAll() as $i => $r) {
+                $punkte[(int)$r['artikel_id']] = ($punkte[(int)$r['artikel_id']] ?? 0) + $g / (60 + $i + 1);
+            }
+        }
+    }
+    // Volltext als weitere Rangliste: nur die tragenden Wörter der Frage (ohne Füllwörter), als Wortanfang
     $woerter = mm_suchwoerter($frage);
-    if ($woerter) {
+    $gVoll = $v ? MM_GEWICHT_VOLL : 1.0;
+    if ($woerter && $gVoll > 0) {
         $bool = implode(' ', array_map(static fn($w) => $w . '*', $woerter));
         $st = $db->prepare("SELECT a.id FROM mm_artikel a WHERE MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) $zeit
                             ORDER BY MATCH(titel, unterzeile, text) AGAINST(? IN BOOLEAN MODE) DESC LIMIT 60");
         $st->execute(array_merge([$bool], $par, [$bool]));
         foreach ($st->fetchAll(PDO::FETCH_COLUMN) as $i => $id) {
-            $punkte[(int)$id] = ($punkte[(int)$id] ?? 0) + 0.5 / (60 + $i + 1);
+            $punkte[(int)$id] = ($punkte[(int)$id] ?? 0) + $gVoll / (60 + $i + 1);
         }
     }
     arsort($punkte);
@@ -514,7 +586,7 @@ function mm_w_bedeutung(array $a): array
     return [
         'frage' => $frage, 'verfahren' => $v ? 'bedeutung' : 'volltext',
         'treffer' => $treffer,
-        'hinweis' => ($v ? 'Sortiert nach Bedeutung und Wortübereinstimmung zusammen; naehe = inhaltliche Nähe (1 = sehr nah). '
+        'hinweis' => ($v ? 'Sortiert nach Bedeutung (Artikeltext und vorab erzeugte Fragen); naehe = inhaltliche Nähe des Textes (1 = sehr nah). Für genaue Wörter und Namen das Werkzeug suchen. '
                          : 'Die Suche nach Bedeutung ist gerade nicht erreichbar, daher Volltextsuche. ')
                    . 'Vollständigen Text mit artikel_lesen (id) lesen; Aussagen am Text prüfen.',
     ];
@@ -652,7 +724,7 @@ function mm_stand_bedienen(): never
         $db = mm_db();
         $z = $db->query("SELECT COUNT(*) n, SUM(art='meldung') m, SUM(art='eigen') e, COUNT(DISTINCT quelle) q,
                          MIN(veroeffentlicht) von, MAX(veroeffentlicht) bis FROM mm_artikel")->fetch();
-        $ab = $db->query("SELECT zeit FROM mm_abruf ORDER BY id DESC LIMIT 1")->fetchColumn();
+        $ab = $db->query("SELECT zeit FROM mm_abruf WHERE art <> 'einbetten' ORDER BY id DESC LIMIT 1")->fetchColumn();
         $neu = [];
         foreach ($db->query('SELECT * FROM mm_artikel ORDER BY veroeffentlicht DESC LIMIT 6') as $r) {
             $neu[] = ['titel' => $r['titel'], 'url' => $r['url'], 'zeit' => mm_zeit($r['veroeffentlicht']), 'art' => $r['art'],

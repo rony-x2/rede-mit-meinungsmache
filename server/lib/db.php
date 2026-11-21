@@ -6,6 +6,9 @@
  */
 declare(strict_types=1);
 
+/** Anweisung für Suchanfragen und erzeugte Fragen (Frage gegen Frage); Artikeltexte werden ohne Anweisung eingebettet. */
+const MM_VEK_ANWEISUNG = "Instruct: Given a question or topic about current German news, retrieve news articles that address it\nQuery: ";
+
 function mm_home(): string
 {
     if (function_exists('posix_getpwuid') && function_exists('posix_geteuid')) {

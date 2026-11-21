@@ -18,6 +18,7 @@ KASTEN = {
     'abruf':   ('Abruf', 'Artikelseite lesen und zerlegen', 'abruf.php · quelle.php'),
     'artikel': ('Artikel', 'Text, Quelle, Autor, Links', None),
     'vektor':  ('Vektoren', 'Qwen3-Embedding-0.6B', None),
+    'anr':     ('Anreicherung', 'Fragen, Suchbegriffe, Themen', 'Gemma 4 · mm_anreichern.py'),
     'assist':  ('KI-Assistent', 'Claude, ChatGPT, Grok, LM Studio', None),
     'server':  ('MCP-Schnittstelle', '9 Werkzeuge, Briefing', 'mcp_server.php'),
     'einbett': ('Einbettung der Frage', 'Qwen3 auf der CPU', None),
@@ -28,7 +29,8 @@ BAHN_B = 'Bei jeder Frage'
 TITEL = 'Aufbau von „Rede mit Meinungsmache“'
 BESCHREIBUNG = ('Stündlich prüft ein Abruf den RSS-Feed von meinungsmache.de, für das Archiv einmalig die Sitemap. '
                 'Neue und geänderte Artikel werden von ihrer Seite gelesen und in Titel, Dachzeile, Text, Quelle, Autor '
-                'und Links zerlegt; ein lokales Einbettungsmodell berechnet Vektoren. Alles landet in MariaDB. Bei jeder '
+                'und Links zerlegt. Ein lokales Sprachmodell schreibt zu jedem Artikel Fragen, Suchbegriffe und Themen; '
+                'ein lokales Einbettungsmodell berechnet Vektoren für Text und Fragen. Alles landet in MariaDB. Bei jeder '
                 'Frage ruft ein KI-Assistent die MCP-Schnittstelle auf; sie sucht in der Datenbank und liefert Artikel '
                 'mit Links zu meinungsmache.de und zur Originalquelle zurück.')
 
@@ -134,34 +136,37 @@ class Zeichnung:
 
 def quer(thema, praefix='dq'):
     z = Zeichnung(praefix)
-    z.bahn(4, 4, 856, 272, BAHN_A)
-    z.kasten('feed', 20, 52, 200)
-    z.kasten('sitemap', 20, 168, 200)
-    z.kasten('abruf', 250, 110, 230)
-    z.kasten('artikel', 510, 52, 190)
-    z.kasten('vektor', 510, 168, 190)
-    z.chip(510, 168, 190)
-    z.hinweis(844, 26, 'Einbettung lokal auf eigener Hardware, ohne Cloud-Dienst')
-    z.zylinder(880, 160, 150, 250)
-    z.pfeil([(220, 87), (235, 87), (235, 135), (248, 135)])
-    z.pfeil([(220, 203), (235, 203), (235, 155), (248, 155)])
-    z.pfeil([(480, 145), (495, 145), (495, 87), (508, 87)])
-    z.pfeil([(605, 122), (605, 166)])
-    z.pfeil([(700, 87), (790, 87), (790, 190), (878, 190)])
-    z.pfeil([(700, 203), (790, 203), (790, 230), (878, 230)])
-    z.bahn(4, 296, 856, 244, BAHN_B)
-    z.kasten('assist', 20, 355, 240)
-    z.kasten('server', 670, 355, 170)
-    z.kasten('einbett', 655, 455, 200)
-    z.chip(655, 455, 200)
-    z.pfeil([(260, 380), (668, 380)], betrieb=True)
-    z.pfeil([(670, 402), (262, 402)], betrieb=True)
-    z.text(465, 372, 'Frage, Briefing-Wunsch · MCP über HTTPS', betrieb=True)
-    z.text(465, 420, 'Artikel mit Links zu Beitrag und Original', betrieb=True)
-    z.pfeil([(842, 390), (878, 390)], betrieb=True, beide=True)
-    z.pfeil([(755, 425), (755, 453)], betrieb=True)
-    z.text(745, 444, 'Frage', betrieb=True, anker='end')
-    return z.svg(1040, 544, thema, 'd-quer')
+    z.bahn(4, 4, 856, 330, BAHN_A)
+    z.kasten('feed', 20, 70, 200)
+    z.kasten('sitemap', 20, 200, 200)
+    z.kasten('abruf', 250, 135, 230)
+    z.kasten('artikel', 510, 44, 230)
+    z.kasten('anr', 510, 144, 230)
+    z.kasten('vektor', 510, 244, 230)
+    z.chip(510, 144, 230)
+    z.chip(510, 244, 230)
+    z.hinweis(844, 26, 'Sprach- und Einbettungsmodell lokal auf eigener Hardware, ohne Cloud-Dienst')
+    z.zylinder(880, 200, 150, 270)
+    z.pfeil([(220, 105), (235, 105), (235, 160), (248, 160)])
+    z.pfeil([(220, 235), (235, 235), (235, 180), (248, 180)])
+    z.pfeil([(480, 170), (495, 170), (495, 79), (508, 79)])
+    z.pfeil([(625, 114), (625, 142)])
+    z.pfeil([(625, 214), (625, 242)])
+    z.pfeil([(740, 79), (800, 79), (800, 240), (878, 240)])
+    z.pfeil([(740, 279), (800, 279), (800, 270), (878, 270)])
+    z.bahn(4, 354, 856, 244, BAHN_B)
+    z.kasten('assist', 20, 413, 240)
+    z.kasten('server', 670, 413, 170)
+    z.kasten('einbett', 655, 513, 200)
+    z.chip(655, 513, 200)
+    z.pfeil([(260, 438), (668, 438)], betrieb=True)
+    z.pfeil([(670, 460), (262, 460)], betrieb=True)
+    z.text(465, 430, 'Frage, Briefing-Wunsch · MCP über HTTPS', betrieb=True)
+    z.text(465, 478, 'Artikel mit Links zu Beitrag und Original', betrieb=True)
+    z.pfeil([(842, 448), (878, 448)], betrieb=True, beide=True)
+    z.pfeil([(755, 483), (755, 511)], betrieb=True)
+    z.text(745, 502, 'Frage', betrieb=True, anker='end')
+    return z.svg(1040, 602, thema, 'd-quer')
 
 
 def hoch(thema, praefix='dh'):
@@ -170,17 +175,21 @@ def hoch(thema, praefix='dh'):
     z.kasten('feed', 20, 40, 200)
     z.kasten('sitemap', 240, 40, 200)
     z.kasten('abruf', 110, 135, 240)
-    z.kasten('artikel', 20, 240, 200)
-    z.kasten('vektor', 240, 240, 200)
+    z.kasten(('Artikel', 'Text, Quelle, Links', None), 20, 240, 200)
+    z.kasten(('Anreicherung', 'Fragen, Themen', 'Gemma 4'), 240, 240, 200)
+    z.kasten('vektor', 130, 345, 200)
     z.chip(240, 240, 200)
-    z.hinweis(440, 24, 'Einbettung lokal')
+    z.chip(130, 345, 200)
+    z.hinweis(440, 24, 'KI-Modelle lokal')
     z.zylinder(150, 440, 160, 104)
     z.pfeil([(120, 110), (120, 122), (230, 122), (230, 133)])
     z.pfeil([(340, 110), (340, 122), (230, 122)], spitze=False)
     z.pfeil([(230, 205), (230, 222), (120, 222), (120, 238)])
     z.pfeil([(220, 275), (238, 275)])
-    z.pfeil([(120, 310), (120, 380), (200, 380), (200, 438)])
-    z.pfeil([(340, 310), (340, 380), (260, 380), (260, 438)])
+    z.pfeil([(120, 310), (120, 327), (230, 327), (230, 343)])
+    z.pfeil([(340, 310), (340, 327), (230, 327)], spitze=False)
+    z.pfeil([(230, 415), (230, 438)])
+    z.pfeil([(20, 275), (12, 275), (12, 500), (148, 500)])
     z.bahn(4, 560, 452, 248, BAHN_B)
     z.kasten('server', 20, 600, 200)
     z.kasten('einbett', 240, 600, 200)

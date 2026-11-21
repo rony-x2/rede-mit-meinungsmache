@@ -239,7 +239,7 @@
 
     <section class="block" id="briefing">
       <h2>Briefing am Morgen und am Abend</h2>
-      <p class="breit">Das Werkzeug <code>briefing</code> liefert alle Artikel eines Zeitraums auf einmal, getrennt nach Meldungen und eigenen Artikeln. Der Assistent fasst sie zusammen, gruppiert nach Themen und mit Link zu jedem Beitrag. Es genügt, im Chat danach zu fragen.</p>
+      <p class="breit">Das Werkzeug <code>briefing</code> liefert alle Artikel eines Zeitraums auf einmal, getrennt nach Meldungen und eigenen Artikeln und mit ihren Themen. Der Assistent fasst sie zusammen, gegliedert nach Themen und mit Link zu jedem Beitrag; auf Wunsch nur zu einem Thema, etwa „Was gab es diese Woche zu Klima und Umwelt?“. Es genügt, im Chat danach zu fragen.</p>
       <ul class="briefings">
         <li>{{ikon:morgen}}<div><b>Morgenbriefing</b><span>alles seit gestern 18 Uhr</span><q>Mach mir ein Morgenbriefing.</q></div></li>
         <li>{{ikon:abend}}<div><b>Abendbriefing</b><span>alles seit heute 6 Uhr</span><q>Was war heute los?</q></div></li>
@@ -267,8 +267,8 @@
     <section class="block" id="werkzeuge">
       <h2>Werkzeuge der Schnittstelle</h2>
       <ul class="werkzeuge">
-        <li><code>briefing</code><span>alle Artikel eines Zeitraums: morgen, abend, tag, woche oder ab einem Zeitpunkt</span></li>
-        <li><code>neueste</code><span>Artikel nach Zeit, wahlweise nach Quelle, Art oder Autor gefiltert</span></li>
+        <li><code>briefing</code><span>alle Artikel eines Zeitraums mit ihren Themen: morgen, abend, tag, woche oder ab einem Zeitpunkt, auf Wunsch nur ein Thema</span></li>
+        <li><code>neueste</code><span>Artikel nach Zeit, wahlweise nach Quelle, Art, Autor oder Thema gefiltert</span></li>
         <li><code>bedeutung_suchen</code><span>Frage in eigenen Worten, findet auch andere Formulierungen</span></li>
         <li><code>suchen</code><span>Volltext in Titel, Dachzeile und Text, mit Ausschnitt</span></li>
         <li><code>artikel_lesen</code><span>vollständiger Artikel mit Quelle, Original-Link und den Links im Text</span></li>
@@ -286,7 +286,8 @@
       <div class="raster zwei aufbau-text">
         <div>
         <p>Jede Stunde liest ein Abruf auf dem Webserver den RSS-Feed von meinungsmache.de. Neue Artikel und solche, die sich geändert haben, holt er von ihrer Seite und zerlegt sie in Titel, Dachzeile, Text, Quelle oder Autor, Bildquelle, Link zum Original und die Links im Text. Das Archiv seit Dezember 2025 kam einmalig über die Sitemap dazu. Der Abruf meldet sich mit einer eigenen Kennung und lässt zwischen zwei Seiten eine Pause.</p>
-        <p>Für die Suche nach Bedeutung berechnet ein lokales Modell (Qwen3-Embedding-0.6B auf eigener Hardware, ohne Cloud-Dienst) zu jedem Artikel Vektoren; lange Artikel werden dafür in Teile zerlegt. Eine Frage wird genauso umgerechnet und mit einer Volltextsuche kombiniert. Ein Sprachmodell braucht es für die Aufbereitung nicht.</p>
+        <p>Danach schreibt ein lokales Sprachmodell (Gemma&nbsp;4 auf eigener Grafikkarte) zu jedem Artikel einige Fragen in Alltagssprache, Suchbegriffe und ein bis drei Themen. Ein kleines Programm auf dem Rechner mit der Karte holt sich neue Artikel stündlich ab und arbeitet nur, wenn die Karte frei ist. Die Themen gliedern das Briefing; die Fragen helfen der Suche, wenn jemand andere Wörter benutzt als der Artikel, etwa „Tanken“ statt „Spritpreise“. Antworten kommen immer aus dem Artikeltext.</p>
+        <p>Für die Suche nach Bedeutung rechnet ein kleines lokales Modell (Qwen3-Embedding-0.6B, ohne Cloud-Dienst) Artikel und erzeugte Fragen in Vektoren um, lange Artikel in Teilen. Eine Frage wird genauso umgerechnet und mit beiden verglichen. In einem Testsatz mit 34 Alltagsfragen steht der passende Artikel so bei 31 auf Platz 1, ohne die erzeugten Fragen bei 25 (<a href="https://github.com/rony-x2/rede-mit-meinungsmache/blob/main/docs/anreicherung.md">Messung</a>).</p>
         </div>
         <div class="hinweisbox">
           <h2>Quelle und Rechte</h2>
@@ -309,8 +310,8 @@
         </div>
         <ul class="qt-teile">
           <li><b>Abruf</b><span>RSS-Feed und Sitemap lesen, Artikelseiten zerlegen, Textteile einbetten, stündlich per Cron</span><code>server/lib/abruf.php</code></li>
+          <li><b>Anreicherung</b><span>Fragen, Suchbegriffe und Themen von Gemma&nbsp;4, abgeholt vom Rechner mit der Grafikkarte</span><code>arbeiter/mm_anreichern.py</code></li>
           <li><b>Schnittstelle</b><span>MCP-Server in PHP mit allen Werkzeugen und dem Briefing</span><code>server/lib/mcp_server.php</code></li>
-          <li><b>Datenbank</b><span>Tabellen für Artikel, Links, Vektoren und Abrufe</span><code>server/lib/schema.sql</code></li>
           <li><b>Diese Seite</b><span>Vorlage, Bauskript, Gestaltung und das Diagramm als SVG</span><code>seite/</code></li>
         </ul>
       </div>
